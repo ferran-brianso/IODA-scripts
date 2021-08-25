@@ -1,0 +1,106 @@
+---
+title: "Report with results from the 'Annotate and Expand Omics Data Matrix' script (v.1)"
+author: Ferran Brianso
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float: TRUE
+    theme: united
+---
+
+Targets' report corresponding to the functions that annotate any original expression matrix (with gene symbols as ids in rows, and sample ids in columns) and expands the annotated matrix to include the average (or sum) values for the annotations (as new extra rows)
+
+```{r libraries}
+library(ggplot2)
+library(targets)
+library(stats)
+```
+
+```{r set-options, echo=FALSE, cache=FALSE}
+options(width = 110)
+```
+
+### Raw data (before data prep) 
+
+Data loaded from file **`r p.inFile`**
+
+Samples in rows; Features in columns 
+
+```{r out.width = '95%', echo=FALSE}
+show(tar_read(in_data))
+```
+
+### Data frame (before annotation) 
+
+Features in ROWS: **`r nrow(tar_read(dframe))`**
+
+Samples in COLUMNS: **`r ncol(tar_read(dframe))`**
+
+(Showing only partial output)
+```{r out.width = '95%'}
+tar_read(dframe)[1:10,1:10]
+```
+
+### Heatmap (before annotation)
+
+Features in ROWS; Samples in COLUMNS
+
+(Showing only partial output)
+```{r out.width = '95%'}
+heatmap(data.matrix(dframe[1:40, 1:16]),
+        cexRow = 0.7, cexCol = 1,
+        Colv = NA)
+```
+
+### Annotated Matrix
+
+Gene Ontology used: **`r p.GO.onto`**
+
+Min. number of genes required to pass the filter: **`r p.GO.miN`**
+
+Annotated categories: **`r ncol(tar_read(categ_matrix))`**
+
+```{r out.width = '95%'}
+tar_read(categ_sums)
+```
+
+Features in ROWS: **`r nrow(tar_read(annot_matrix))`**
+
+Samples+Categs in COLUMNS: **`r ncol(tar_read(annot_matrix))`**
+
+(Showing only partial output)
+```{r out.width = '95%'}
+head(tar_read(annot_matrix))
+```
+
+### Expanded Matrix
+
+Gene Ontology used: **`r p.GO.onto`**
+
+Min. number of genes applied to filter: **`r p.GO.miN`**
+
+Annotated categories: **`r ncol(tar_read(categ_matrix))`**
+
+Features+Categs in ROWS: **`r nrow(tar_read(expd_matrix))`**
+
+Samples in COLUMNS: **`r ncol(tar_read(expd_matrix))`**
+
+(Showing only partial output)
+```{r out.width = '95%'}
+tail(tar_read(expd_matrix), ncol(categ_matrix))[,1:10]
+```
+
+### Heatmap (after row expansion) 
+
+Features+Categs in ROWS; Samples in COLUMNS
+
+(Showing full and partial output)
+```{r out.width = '95%', echo=FALSE}
+heatmap(expd_matrix,
+        cexRow = 0.3, cexCol = 0.3)
+heatmap(expd_matrix[c(1:25,(nrow(annot_matrix)+1):nrow(expd_matrix)), 1:16],
+        cexRow = 0.7, cexCol = 1)
+```
+
+
