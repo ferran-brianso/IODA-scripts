@@ -55,7 +55,6 @@ hist(prot_sc)
 ## Correlation matrix
 
 ```{r corr-plot, out.width = '95%'}
-require(mixOmics)
 plot_corr_matrix(tar_read(X), tar_read(Y), p.resultsDir)
 ```
 ![Correlation matrix](./results/mixomics/corrMatrix.png)
@@ -68,19 +67,28 @@ tar_read(rCCA)
 
 ### Individual samples plot
 ```{r indiv-plot, out.width = '95%'}
-require(mixOmics)
 plot_indiv(tar_read(rCCA), p.resultsDir)
 ```
 
 
 ### Correlation circles plots
-Correlation circles plots (at **cutoff points: `r p.cutOffs`**)
+Correlation circles plots (at **cutoff points: `r p.circ.cutOffs`**)
 
 ```{r corrCirc-plot, out.width = '80%'}
-require(mixOmics)
-for(i in 1:length(p.cutOffs)){
-  plot_corrCirc(tar_read(rCCA), p.resultsDir, cutOff = p.cutOffs[i])
+for(i in 1:length(p.circ.cutOffs)){
+  plot_corrCirc(tar_read(rCCA), p.resultsDir, cutOff = p.circ.cutOffs[i])
 }
 ```
 
 
+### Correlation network
+```{r rCCA-network, out.width = '95%'}
+str(tar_read(rCCA_network))
+```
+![Correlation network](./results/mixomics/relNetwork0.5.png)
+
+### CIM heatmap
+```{r CIM-plot, out.width = '95%'}
+plot_cim(tar_read(rCCA_tagged), p.resultsDir, x.lab = p.x.lab, y.lab = p.y.lab) 
+```
+![CIM Heatmap](./results/mixomics/cimHeatMap.png)

@@ -22,6 +22,9 @@
 
 p.inFile = "data/raw.data.Rda"  # Rda file with raw data from genes and prots (both with gene symbols)
 
+## HAUREM DE DECIDIR EN QUINS ALTRES FORMATS ES PODEN LLEGIR LES DADES, 
+## JA QUE PER ARA SOLS LES LLEGIM D'UN Rda
+
 ############################################################
 
 
@@ -33,9 +36,16 @@ p.inFile = "data/raw.data.Rda"  # Rda file with raw data from genes and prots (b
 
 p.export = TRUE  # TRUE/FALSE
 p.resultsDir = "results/mixomics"
-p.scoresFile = "cv.score.Rdata"
-p.rccFile = "rccResult.Rdata"
+p.scoresFile = "cv.score.Rda"
+p.rccFile = "rccResult.Rda"
 
-p.cutOffs = c(0.5, 0.6, 0.7)
+p.circ.cutOffs = c(0.55, 0.65, 0.75)
+p.netw.threshold = p.circ.cutOffs[1] #0.5
+
+p.x.tag = "g."
+p.y.tag = "p."
+
+p.x.lab = "Genes"
+p.y.lab = "Prots"
 
 ############################################################

@@ -52,11 +52,11 @@ list(
     scale(prot_data)
   ),
   tar_target(
-    X,
+    X, # from now on, X will be gene (mRNA expression) related data
     t(gene_sc)
   ),
   tar_target(
-    Y,
+    Y, # from now on, Y will be protein related data
     t(prot_sc)
   ),
   
@@ -66,6 +66,16 @@ list(
     perform_rCCA(X, Y, p.resultsDir, p.scoresFile, p.rccFile)
   ),
 
+  tar_target(
+    rCCA_tagged,
+    tag_features(rCCA, x.tag = p.x.tag, y.tag = p.y.tag)
+  ),
+  
+  tar_target(
+    rCCA_network,
+    get_corrNetwork(rCCA_tagged, p.resultsDir, p.netw.threshold)
+  ),
+  
   
   ## 00- Creacio de l'informe en HTML
   tar_render(report, "report.Rmd")
