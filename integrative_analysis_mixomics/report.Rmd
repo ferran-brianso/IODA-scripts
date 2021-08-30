@@ -74,7 +74,7 @@ plot_indiv(tar_read(rCCA), p.resultsDir)
 
 
 ### Correlation circles plots
-Correlation circles plots (at ascending cutoff points)
+Correlation circles plots (at **cutoff points: `r p.cutOffs`**)
 
 ```{r corrCirc-plot, out.width = '80%'}
 require(mixOmics)
