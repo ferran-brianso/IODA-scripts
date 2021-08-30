@@ -2,7 +2,10 @@
 ##### Created by Ferran Brianso
 ##### ferran.brianso_at_gmail.com
 ############################################################
-
+#####
+##### targets_.R file for Integrative Analysis with Mixomics
+#####
+############################################################
 
 ############################################################
 ##### To run this targets script:
