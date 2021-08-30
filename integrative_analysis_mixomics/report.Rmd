@@ -23,7 +23,7 @@ library(mixOmics)
 options(width = 110)
 ```
 
-### Raw data (before data prep) 
+## Raw data (before data prep) 
 
 Data loaded from file **`r p.inFile`**
 (Features in rows; Samples in columns)
@@ -38,7 +38,7 @@ hist(gene_data)
 hist(prot_data)
 ```
 
-### Data after scaling
+## Data after scaling
 
 (Features in rows; Samples in columns)
 
@@ -52,11 +52,35 @@ hist(gene_sc)
 hist(prot_sc)
 ```
 
-### Correlation matrix
+## Correlation matrix
 
 ```{r corr-plot, out.width = '95%'}
 require(mixOmics)
 plot_corr_matrix(tar_read(X), tar_read(Y), p.resultsDir)
 ```
 ![Correlation matrix](./results/mixomics/corrMatrix.png)
+
+## rCCA results
+
+```{r rCCA-results, out.width = '95%'}
+tar_read(rCCA)
+```
+
+### Individual samples plot
+```{r indiv-plot, out.width = '95%'}
+require(mixOmics)
+plot_indiv(tar_read(rCCA), p.resultsDir)
+```
+
+
+### Correlation circles plots
+Correlation circles plots (at ascending cutoff points)
+
+```{r corrCirc-plot, out.width = '80%'}
+require(mixOmics)
+for(i in 1:length(p.cutOffs)){
+  plot_corrCirc(tar_read(rCCA), p.resultsDir, cutOff = p.cutOffs[i])
+}
+```
+
 

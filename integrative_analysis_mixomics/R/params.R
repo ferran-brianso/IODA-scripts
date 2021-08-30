@@ -33,5 +33,9 @@ p.inFile = "data/raw.data.Rda"  # Rda file with raw data from genes and prots (b
 
 p.export = TRUE  # TRUE/FALSE
 p.resultsDir = "results/mixomics"
+p.scoresFile = "cv.score.Rdata"
+p.rccFile = "rccResult.Rdata"
+
+p.cutOffs = c(0.5, 0.6, 0.7)
 
 ############################################################

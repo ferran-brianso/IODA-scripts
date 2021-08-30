@@ -13,13 +13,15 @@
 library(targets)
 library(tarchetypes)
 
-## 2- load functions, params and general options
+## 2- set the working dir to the source file directory
+
+## 3- load functions, params and general options
 source("R/functions.R")
 source("R/params.R")
 options(tidyverse.quiet = TRUE)
 tar_option_set(packages = c("tidyverse", "biglm", "dplyr", "readr", "tidyr"))
 
-## 3- run the following comands IN CONSOLE
+## 4- run the following comands IN CONSOLE
 #tar_make()       # to run the script
 #tar_glimpse()    # to see a simple view of the workflow
 #tar_visnetwork() # to see the same with functions and params
@@ -27,7 +29,7 @@ tar_option_set(packages = c("tidyverse", "biglm", "dplyr", "readr", "tidyr"))
 
 
 ############################################################
-##### DO NOT RUN ANY OF THE REMAINING LINES
+##### DO NOT RUN ANY OF THE LINES BELOW
 ############################################################
 list(
   ## 01- Carrega dades d'entrada
@@ -39,6 +41,8 @@ list(
     prot_data,
     load_and_check(p.inFile, type = "P")
   ),
+  
+  ## 02- Prepara les dades
   tar_target(
     gene_sc,
     scale(gene_data)
@@ -56,7 +60,13 @@ list(
     t(prot_sc)
   ),
   
+  ## 03- Executa l'analisi integrativa
+  tar_target(
+    rCCA,
+    perform_rCCA(X, Y, p.resultsDir, p.scoresFile, p.rccFile)
+  ),
 
+  
   ## 00- Creacio de l'informe en HTML
   tar_render(report, "report.Rmd")
 )
