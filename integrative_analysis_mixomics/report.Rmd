@@ -13,6 +13,7 @@ Targets' report corresponding to the functions that execute de Mixomics part of 
 
 ```{r libraries, include=FALSE, echo=FALSE}
 library(ggplot2)
+library(heatmaply)
 library(targets)
 library(stats)
 library(mixOmics)
@@ -38,6 +39,32 @@ hist(gene_data)
 hist(prot_data)
 ```
 
+### X heatmap
+```{r HeatmapX-plot, out.width = '95%'}
+p <- heatmaply(gene_data, 
+        #dendrogram = "row",
+        xlab = "", ylab = "", 
+        main = "",
+        scale = "column",
+        margins = c(60,100,40,20),
+        grid_color = "grey",
+        grid_width = 0.00001,
+        titleX = FALSE,
+        hide_colorbar = TRUE,
+        branches_lwd = 0.1,
+        label_names = c("Gene", "Sample", "Value"),
+        fontsize_row = 5, fontsize_col = 5,
+        labCol = colnames(gene_data),
+        labRow = rownames(gene_data),
+        heatmap_layers = theme(axis.line=element_blank())
+        )
+p
+# save the widget
+# library(htmlwidgets)
+# saveWidget(p, file= "~/.../heatmap.html")
+```
+
+
 ## Data after scaling
 
 (Features in rows; Samples in columns)
@@ -52,12 +79,60 @@ hist(gene_sc)
 hist(prot_sc)
 ```
 
+### X heatmap scaled
+```{r HeatmapX-sc-plot, out.width = '95%'}
+p <- heatmaply(gene_sc, 
+        #dendrogram = "row",
+        xlab = "", ylab = "", 
+        main = "",
+        scale = "column",
+        margins = c(60,100,40,20),
+        grid_color = "grey",
+        grid_width = 0.00001,
+        titleX = FALSE,
+        hide_colorbar = TRUE,
+        branches_lwd = 0.1,
+        label_names = c("Gene", "Sample", "Value"),
+        fontsize_row = 5, fontsize_col = 5,
+        labCol = colnames(gene_sc),
+        labRow = rownames(gene_sc),
+        heatmap_layers = theme(axis.line=element_blank())
+        )
+p
+# save the widget
+# library(htmlwidgets)
+# saveWidget(p, file= "~/.../heatmap.html")
+```
+
+
 ## Correlation matrix
 
 ```{r corr-plot, out.width = '95%'}
 plot_corr_matrix(tar_read(X), tar_read(Y), p.resultsDir)
 ```
 ![Correlation matrix](./results/mixomics/corrMatrix.png)
+
+
+```{r corr-plotX, out.width = '95%'}
+heatmaply_cor(
+  cor(X),
+  xlab = "Genes",
+  ylab = "Genes"#,
+  #k_col = 2,
+  #k_row = 2
+)
+```
+
+```{r corr-plotY, out.width = '95%'}
+heatmaply_cor(
+  cor(Y),
+  xlab = "Prots",
+  ylab = "Prots"#,
+  #k_col = 2,
+  #k_row = 2
+)
+```
+
 
 ## rCCA results
 
@@ -81,14 +156,55 @@ for(i in 1:length(p.circ.cutOffs)){
 ```
 
 
+### rCCA details 
+```{r rCCA-tagged, out.width = '95%'}
+str(tar_read(rCCA_tagged))
+```
+
+
+
 ### Correlation network
 ```{r rCCA-network, out.width = '95%'}
 str(tar_read(rCCA_network))
+str(rCCA_network$M)
 ```
 ![Correlation network](./results/mixomics/relNetwork0.5.png)
+
+### Correlation Heatmap 
+```{r CorrHeatmap-plot, out.width = '95%'}
+mat <- data.matrix(rCCA_network$M)
+colnames(mat) <- colnames(rCCA_network$M)
+rownames(mat) <- rownames(rCCA_network$M)
+str(mat)
+
+which(rowSums(abs(mat))!=0)
+which(colSums(abs(mat))!=0)
+
+mat <- mat[which(rowSums(abs(mat))!=0), which(colSums(abs(mat))!=0)]
+
+head(mat)
+
+p <- heatmaply_cor(
+    mat,
+    xlab = "Prots",
+    ylab = "Genes"#,
+    #k_col = 2,
+    #k_row = 2
+)
+
+p
+  
+# save the widget
+# library(htmlwidgets)
+# saveWidget(p, file= "~/.../heatmap.html")
+```
+
 
 ### CIM heatmap
 ```{r CIM-plot, out.width = '95%'}
 plot_cim(tar_read(rCCA_tagged), p.resultsDir, x.lab = p.x.lab, y.lab = p.y.lab) 
 ```
 ![CIM Heatmap](./results/mixomics/cimHeatMap.png)
+
+
+
