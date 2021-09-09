@@ -9,6 +9,9 @@
 
 ############################################################
 ##### To run this targets script:
+## 0- allocate all files and folders in you working dir
+##    and open _targets.R file in Rstudio
+
 ## 1- load 'targets' and 'tarchetypes' libs
 library(targets)
 library(tarchetypes)
