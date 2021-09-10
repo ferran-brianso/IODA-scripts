@@ -56,7 +56,7 @@ list(
   ## 03- Creacio de la taula de categories anotades (amb valors 1/0)
   tar_target(
     categ_matrix, 
-    get_categ_matrix(onto=p.GO.onto, N=p.GO.miN, df=dframe, afile=p.annotFile) 
+    get_categ_matrix(onto=p.GO.onto, resultsDir=p.resultsDir, N=p.GO.miN, df=dframe, afile=p.annotFile) 
   ),
   
   ## 04- Recompte de gens anotats per categoria (amb valor 1)
@@ -77,7 +77,7 @@ list(
   ## 06- Expansio de files afegint les mitjanes dels valors de les categories anotades
   tar_target(
     expd_matrix,
-    expand_annot_matrix(annot_matrix, 
+    expand_annot_matrix(annot_matrix, p.resultsDir,
                         1:ncol(dframe), # range of cols containing samples
                         (ncol(dframe)+1):(ncol(dframe)+ncol(categ_matrix)), # idem for categs
                         method="mean")

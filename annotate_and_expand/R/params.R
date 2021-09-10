@@ -25,6 +25,13 @@ p.inFile="data/mrna.csv"    # csv file with raw data from a single omics source
 
 
 ############################################################
+#### Params for exporting results
+## related targets: 
+##       
+
+p.resultsDir = "results"
+
+############################################################
 ## Params for the biological annotation
 ## related targets: 
 ##       categ_matrix

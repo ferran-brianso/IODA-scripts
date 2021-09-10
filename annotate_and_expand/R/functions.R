@@ -14,7 +14,7 @@ library(stats)
 
 
 set_dframe <- function(my.data) {
-  ## expected input: samples in rows (1st column is sample name!!) and features in columns
+  ## expected input: samples in rows (1st column is sample name!!)
   ## feature ids in the remaining columns
   ## RETURNS: a data frame with FEATURES in ROWS and SAMPLES in COLUMNS
   my.frame <- as.data.frame(my.data)
@@ -35,7 +35,7 @@ set_dframe <- function(my.data) {
 # }
 
 
-get_categ_matrix <- function(onto="BP", N=10, df, afile=NA) {
+get_categ_matrix <- function(onto="BP", resultsDir, N=10, df, afile=NA) {
   # if afile is NA, annotate the data considering onto and N
   if (is.na(afile)){
     # onto: should be one of "BP"(default), "MF" or "CC"
@@ -65,15 +65,17 @@ get_categ_matrix <- function(onto="BP", N=10, df, afile=NA) {
   # otherwise, load annotations from corresponding input  file
   }else{
     categ.matrix <- read.csv(afile, header = TRUE, sep = ",")
-    categ.matrix <- data.matrix(categ.matrix[ ,-1])
+    categ.matrix <- data.matrix(categ.matrix[ ,-1]) # first column should be exactly the same feature names 
+                                                    # as provided for the expression data 
   }
   
-  # retorno la matriu de categories
+  # guardo i retorno la matriu de categories
+  save(categ.matrix, file = file.path(resultsDir, "categ.matrix.Rda"))
   return(categ.matrix)
 }  
 
 
-expand_annot_matrix <- function(x, s.cols, c.cols, method="mean"){
+expand_annot_matrix <- function(x, resultsDir, s.cols, c.cols, method="mean"){
   # function that, given a matrix including expr values for genes (rows) and samples + binary 
   ## annotations to bio categs (in columns), returns the same matrix with additional 
   ## rows containing the "mean", or "sum", values of those genes included in the categories
@@ -94,6 +96,9 @@ expand_annot_matrix <- function(x, s.cols, c.cols, method="mean"){
     rownames(em)[dim(em)[1]] <- colnames(x)[length(s.cols)+j]
   }
   em <- em[ , s.cols]
+  
+  ## guardo i retorno la matriu expandida
+  save(em, file = file.path(resultsDir, "expanded.matrix.Rda"))
   return(em)
 }
 ###################################################
