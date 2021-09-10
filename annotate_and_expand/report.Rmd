@@ -47,11 +47,36 @@ tar_read(dframe)[1:10,1:10]
 
 Features in ROWS; Samples in COLUMNS
 
-(Showing only partial output)
-```{r out.width = '95%'}
-heatmap(data.matrix(dframe[1:40, 1:16]),
-        cexRow = 0.7, cexCol = 1,
-        Colv = NA)
+<!-- (Showing only partial output) -->
+<!-- ```{r out.width = '95%'} -->
+<!-- heatmap(data.matrix(dframe[1:40, 1:16]), -->
+<!--         cexRow = 0.7, cexCol = 1, -->
+<!--         Colv = NA) -->
+<!-- ``` -->
+
+#### Heatmaply
+```{r Heatmap.Pre, out.width = '95%'}
+p <- heatmaply(data.matrix(dframe), 
+        #dendrogram = "row",
+        xlab = "", ylab = "", 
+        main = "",
+        scale = "none",
+        margins = c(60,100,40,20),
+        #grid_color = "white",
+        #grid_width = 0,
+        titleX = FALSE,
+        hide_colorbar = FALSE,
+        branches_lwd = 0.1,
+        label_names = c("Feature", "Sample", "Value"),
+        fontsize_row = 5, fontsize_col = 5,
+        labCol = colnames(data.matrix(dframe)),
+        labRow = rownames(data.matrix(dframe)),
+        heatmap_layers = theme(axis.line=element_blank())
+        )
+p
+# save the widget
+# library(htmlwidgets)
+# saveWidget(p, file= "~/.../heatmap.html")
 ```
 
 ### Annotated Matrix
@@ -75,6 +100,32 @@ Samples+Categs in COLUMNS: **`r ncol(tar_read(annot_matrix))`**
 head(tar_read(annot_matrix))
 ```
 
+```{r Heatmap.Categs, out.width = '95%', eval = FALSE}
+p <- heatmaply(categ_matrix, 
+        dendrogram = "none",
+        xlab = "", ylab = "", 
+        main = "",
+        scale = "none",
+        margins = c(60,100,40,20),
+        #grid_color = "white",
+        #grid_width = 0,
+        titleX = FALSE,
+        hide_colorbar = FALSE,
+        branches_lwd = 0.1,
+        label_names = c("Feature", "Sample", "Value"),
+        fontsize_row = 5, fontsize_col = 5,
+        labCol = colnames(categ_matrix),
+        labRow = rownames(categ_matrix),
+        heatmap_layers = theme(axis.line=element_blank())
+        )
+p
+# save the widget
+# library(htmlwidgets)
+# saveWidget(p, file= "~/.../heatmap.html")
+```
+
+
+
 ### Expanded Matrix
 
 Gene Ontology used: **`r p.GO.onto`**
@@ -96,17 +147,7 @@ tail(tar_read(expd_matrix), ncol(categ_matrix))[,1:10]
 
 Features+Categs in ROWS; Samples in COLUMNS
 
-(Showing full and partial output)
-```{r out.width = '95%', echo=FALSE}
-heatmap(expd_matrix,
-        cexRow = 0.3, cexCol = 0.3)
-heatmap(expd_matrix[c(1:25,(nrow(annot_matrix)+1):nrow(expd_matrix)), 1:16],
-        cexRow = 0.7, cexCol = 1)
-```
-
-
-#### Heatmaply
-```{r Heatmaply, out.width = '95%'}
+```{r Heatmap.Post, out.width = '95%'}
 p <- heatmaply(expd_matrix, 
         #dendrogram = "row",
         xlab = "", ylab = "", 
@@ -116,7 +157,7 @@ p <- heatmaply(expd_matrix,
         #grid_color = "white",
         #grid_width = 0,
         titleX = FALSE,
-        hide_colorbar = TRUE,
+        hide_colorbar = FALSE,
         branches_lwd = 0.1,
         label_names = c("Feature", "Sample", "Value"),
         fontsize_row = 5, fontsize_col = 5,
