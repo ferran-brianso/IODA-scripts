@@ -10,24 +10,31 @@
 
 load_and_check <- function(inFile, type = "G") {
   ## expected input: path to raw data file in .Rda format 
-  ##                 which should have gene.data and prot.data objects!!
-  ## RETURNS: gene or protein data (checked in order to remove duplicates)
+  ##                 which should have data.1 (e.g. genes) and data.2 (e.g. prots) objects!!
+  ## RETURNS: data1 or data2 loaded and checked (in order to remove duplicates)
 
   load(file=inFile, verbose = TRUE)
   
   if (type=="G"){
-    in.data <- t(gene.data)
+    in.data <- data.1 #t(data.1)
   }else{
-    in.data <- t(prot.data)
+    in.data <- data.2 #t(data.2)
   }
   #dim(in.data)
   #sum(is.na(in.data))
-  ## check if there are some duplicated gene names
+  ## check if there are some duplicated gene names (rows)
   dups <- rownames(in.data)[which(duplicated(rownames(in.data)))]
   if (length(dups)>0){
     in.data[which(rownames(in.data) %in% dups),]
     in.data <- in.data[!duplicated(rownames(in.data)),]
   }
+  # ## and check if there are some duplicated sample names (columns)
+  # dups2 <- colnames(in.data)[which(duplicated(colnames(in.data)))]
+  # if (length(dups2)>0){
+  #   in.data[which(colnames(in.data) %in% dups2),]
+  #   in.data <- in.data[!duplicated(colnames(in.data)),]
+  # }
+  
   #dim(in.data)
   return(in.data)
 }
@@ -141,8 +148,7 @@ get_corrNetwork <- function(rccaResult, resultsDir, netw.threshold = 0.5){
 
   ## Save relevance network into a png file
   png(file=file.path(resultsDir, 
-                     paste0("relNetwork", as.character(netw.threshold),
-                           ".png")),
+                     paste0("relNetwork", as.character(netw.threshold), ".png")),
       width=800, height=800, res=120)
     network(rccaResult, comp = 1:3, interactive = FALSE, cutoff=netw.threshold)
   dev.off()
@@ -150,9 +156,8 @@ get_corrNetwork <- function(rccaResult, resultsDir, netw.threshold = 0.5){
   ## Export it to Cytoscape-readable .graphml format
   write.graph(net$gR, 
               file=file.path(resultsDir, 
-                             paste("relNetwork", 
-                                   as.character(netw.threshold),".graphml",
-                                   sep="")), 
+                             paste0("relNetwork", 
+                                   as.character(netw.threshold),".graphml")), 
               format = "graphml")
   
   ## And obtain and save the specific pairs having corr value over the threshold
