@@ -13,6 +13,7 @@ Targets' report corresponding to the functions that annotate any original expres
 
 ```{r libraries}
 library(ggplot2)
+library(heatmaply)
 library(targets)
 library(stats)
 ```
@@ -104,3 +105,27 @@ heatmap(expd_matrix[c(1:25,(nrow(annot_matrix)+1):nrow(expd_matrix)), 1:16],
 ```
 
 
+#### Heatmaply
+```{r Heatmaply, out.width = '95%'}
+p <- heatmaply(expd_matrix, 
+        #dendrogram = "row",
+        xlab = "", ylab = "", 
+        main = "",
+        scale = "none",
+        margins = c(60,100,40,20),
+        #grid_color = "white",
+        #grid_width = 0,
+        titleX = FALSE,
+        hide_colorbar = TRUE,
+        branches_lwd = 0.1,
+        label_names = c("Feature", "Sample", "Value"),
+        fontsize_row = 5, fontsize_col = 5,
+        labCol = colnames(expd_matrix),
+        labRow = rownames(expd_matrix),
+        heatmap_layers = theme(axis.line=element_blank())
+        )
+p
+# save the widget
+# library(htmlwidgets)
+# saveWidget(p, file= "~/.../heatmap.html")
+```
