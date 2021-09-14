@@ -21,13 +21,14 @@
 ## related targets: 
 ##       data_file
 
-p.inFile="data/mrna.csv"    # csv file with raw data from a single omics source
+p.inFile1="data/mrna.csv"    # csv file with raw data from a first omics source (mandatory)
+p.inFile2="data/prots.csv"    # csv file with raw data from a second omics source (optional, or NA)
 
 
 ############################################################
 #### Params for exporting results
 ## related targets: 
-##       
+##
 
 p.resultsDir = "results"
 
@@ -39,7 +40,7 @@ p.resultsDir = "results"
 p.GO.onto="BP" # onto: should be one of "BP"(default), "MF" or "CC"
 p.GO.miN=8      # N: number to filter out those GO categs not having N+ elements from our gene list
 
-p.annotFile="data/annotations.csv" # should be NA if not available!!!
+p.annotFile=NA #"data/annotations.csv" # should be NA if not available!!!
 
 if(!is.na(p.annotFile)){
   p.GO.onto <<- paste("None.",  "Annotations loaded from file:",  p.annotFile)
