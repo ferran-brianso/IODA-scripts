@@ -24,18 +24,8 @@ set_dframe <- function(my.data) {
 }
 
 
-# create_plot <- function(my.matrix) {
-#   my.matrix %>% 
-#     as.data.frame() %>% 
-#     rownames_to_column("feature") %>% 
-#     pivot_longer(-c(feature), names_to = "sample", values_to = "values") %>% 
-#     ggplot(aes(x=sample, y=feature, fill=values)) + 
-#       geom_raster() +
-#       scale_fill_viridis_c()
-# }
 
-
-get_categ_matrix <- function(onto="BP", resultsDir, N=10, df, afile=NA) {
+get_categ_matrix <- function(onto="BP", resultsDir, N=10, df, afile=NA, outTag = "") {
   # if afile is NA, annotate the data considering onto and N
   if (is.na(afile)){
     # onto: should be one of "BP"(default), "MF" or "CC"
@@ -70,12 +60,12 @@ get_categ_matrix <- function(onto="BP", resultsDir, N=10, df, afile=NA) {
   }
   
   # guardo i retorno la matriu de categories
-  save(categ.matrix, file = file.path(resultsDir, "categ.matrix.Rda"))
+  save(categ.matrix, file = file.path(resultsDir, paste0("categ.matrix", outTag, ".Rda")))
   return(categ.matrix)
 }  
 
 
-expand_annot_matrix <- function(x, resultsDir, s.cols, c.cols, method="mean"){
+expand_annot_matrix <- function(x, resultsDir, s.cols, c.cols, method="mean", outTag = "") {
   # function that, given a matrix including expr values for genes (rows) and samples + binary 
   ## annotations to bio categs (in columns), returns the same matrix with additional 
   ## rows containing the "mean", or "sum", values of those genes included in the categories
@@ -87,19 +77,19 @@ expand_annot_matrix <- function(x, resultsDir, s.cols, c.cols, method="mean"){
     }
     #print(vals)
     if (j==1){
-      em <- rbind(x, c(vals,rep(NA, length(c.cols))))
-      em[dim(em)[1],c.cols[j]] <- length(which(x[,c.cols[j]]==1))
+      expanded.matrix <- rbind(x, c(vals,rep(NA, length(c.cols))))
+      expanded.matrix[dim(expanded.matrix)[1],c.cols[j]] <- length(which(x[,c.cols[j]]==1))
     }else{
-      em <- rbind(em, c(vals,rep(NA, length(c.cols))))
-      em[dim(em)[1],c.cols[j]] <- length(which(x[,c.cols[j]]==1))
+      expanded.matrix <- rbind(expanded.matrix, c(vals,rep(NA, length(c.cols))))
+      expanded.matrix[dim(expanded.matrix)[1],c.cols[j]] <- length(which(x[,c.cols[j]]==1))
     }
-    rownames(em)[dim(em)[1]] <- colnames(x)[length(s.cols)+j]
+    rownames(expanded.matrix)[dim(expanded.matrix)[1]] <- colnames(x)[length(s.cols)+j]
   }
-  em <- em[ , s.cols]
+  expanded.matrix <- expanded.matrix[ , s.cols]
   
   ## guardo i retorno la matriu expandida
-  save(em, file = file.path(resultsDir, "expanded.matrix.Rda"))
-  return(em)
+  save(expanded.matrix, file = file.path(resultsDir, paste0("expanded.matrix", outTag, ".Rda")))
+  return(expanded.matrix)
 }
 ###################################################
 ## expand_annot_matrix call example

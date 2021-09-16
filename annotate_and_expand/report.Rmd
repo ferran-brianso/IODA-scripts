@@ -11,7 +11,7 @@ output:
 
 Targets' report corresponding to the functions that annotate any original expression matrix (with gene symbols as ids in rows, and sample ids in columns) and expands the annotated matrix to include the average (or sum) values for the annotations (as new extra rows)
 
-```{r libraries}
+```{r libraries, echo=FALSE}
 library(ggplot2)
 library(heatmaply)
 library(targets)
@@ -50,7 +50,7 @@ tar_read(dframe1)[1:10,1:10]
 tar_read(dframe2)[1:10,1:10]
 ```
 
-### Heatmap (before annotation)
+### Heatmaps (before annotation)
 
 Features in ROWS; Samples in COLUMNS
 
@@ -116,19 +116,23 @@ Gene Ontology used: **`r p.GO.onto`**
 
 Min. number of genes required to pass the filter: **`r p.GO.miN`**
 
-Annotated categories: **`r ncol(tar_read(categ_matrix1))`**
-Annotated categories: **`r ncol(tar_read(categ_matrix2))`**
+Annotated categories: **`r ncol(tar_read(categ_matrix1))`** (for *`r p.inFile1`*)
+
+Annotated categories: **`r ncol(tar_read(categ_matrix2))`** (for *`r p.inFile2`*)
 
 ```{r out.width = '95%'}
 tar_read(categ_sums1)
 tar_read(categ_sums2)
 ```
 
-Features in ROWS: **`r nrow(tar_read(annot_matrix1))`**
-Features in ROWS: **`r nrow(tar_read(annot_matrix2))`**
+Features in ROWS: **`r nrow(tar_read(annot_matrix1))`** (for *`r p.inFile1`*)
 
-Samples+Categs in COLUMNS: **`r ncol(tar_read(annot_matrix1))`**
-Samples+Categs in COLUMNS: **`r ncol(tar_read(annot_matrix2))`**
+Features in ROWS: **`r nrow(tar_read(annot_matrix2))`** (for *`r p.inFile2`*)
+
+Samples+Categs in COLUMNS: **`r ncol(tar_read(annot_matrix1))`** (for *`r p.inFile1`*)
+
+Samples+Categs in COLUMNS: **`r ncol(tar_read(annot_matrix2))`** (for *`r p.inFile2`*)
+
 
 (Showing only partial output)
 ```{r out.width = '95%'}
@@ -191,14 +195,17 @@ Gene Ontology used: **`r p.GO.onto`**
 
 Min. number of genes applied to filter: **`r p.GO.miN`**
 
-Annotated categories: **`r ncol(tar_read(categ_matrix1))`**
-Annotated categories: **`r ncol(tar_read(categ_matrix2))`**
+Annotated categories: **`r ncol(tar_read(categ_matrix1))`** (for *`r p.inFile1`*)
 
-Features+Categs in ROWS: **`r nrow(tar_read(expd_matrix1))`**
-Features+Categs in ROWS: **`r nrow(tar_read(expd_matrix2))`**
+Annotated categories: **`r ncol(tar_read(categ_matrix2))`** (for *`r p.inFile2`*)
 
-Samples in COLUMNS: **`r ncol(tar_read(expd_matrix1))`**
-Samples in COLUMNS: **`r ncol(tar_read(expd_matrix2))`**
+Features+Categs in ROWS: **`r nrow(tar_read(expd_matrix1))`** (for *`r p.inFile1`*)
+
+Features+Categs in ROWS: **`r nrow(tar_read(expd_matrix2))`** (for *`r p.inFile2`*)
+
+Samples in COLUMNS: **`r ncol(tar_read(expd_matrix1))`** (for *`r p.inFile1`*)
+
+Samples in COLUMNS: **`r ncol(tar_read(expd_matrix2))`** (for *`r p.inFile2`*)
 
 (Showing only partial output)
 ```{r out.width = '95%'}

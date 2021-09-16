@@ -70,12 +70,14 @@ list(
   ## 03- Creacio de la taula de categories anotades (amb valors 1/0)
   tar_target(
     categ_matrix1, 
-    get_categ_matrix(onto=p.GO.onto, resultsDir=p.resultsDir, N=p.GO.miN, df=dframe1, afile=p.annotFile) 
+    get_categ_matrix(onto=p.GO.onto, resultsDir=p.resultsDir, N=p.GO.miN, df=dframe1, 
+                     afile=p.annotFile, outTag = p.outTag1) 
   ),
 
   tar_target(
     categ_matrix2, 
-    get_categ_matrix(onto=p.GO.onto, resultsDir=p.resultsDir, N=p.GO.miN, df=dframe2, afile=p.annotFile) 
+    get_categ_matrix(onto=p.GO.onto, resultsDir=p.resultsDir, N=p.GO.miN, df=dframe2, 
+                     afile=p.annotFile, outTag = p.outTag2) 
   ),
   
   ## 04- Recompte de gens anotats per categoria (amb valor 1)
@@ -110,7 +112,7 @@ list(
     expand_annot_matrix(annot_matrix1, p.resultsDir,
                         1:ncol(dframe1), # range of cols containing samples
                         (ncol(dframe1)+1):(ncol(dframe1)+ncol(categ_matrix1)), # idem for categs
-                        method="mean")
+                        method="mean", outTag = p.outTag1) 
   ),
   
   tar_target(
@@ -118,7 +120,7 @@ list(
     expand_annot_matrix(annot_matrix2, p.resultsDir,
                         1:ncol(dframe2), # range of cols containing samples
                         (ncol(dframe2)+1):(ncol(dframe2)+ncol(categ_matrix2)), # idem for categs
-                        method="mean")
+                        method="mean", outTag = p.outTag2) 
   ),
 
   # ## Per crear el heat map amb ggplot2 de les dades expandides
