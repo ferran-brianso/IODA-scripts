@@ -1,3 +1,11 @@
 name|type|parent|branches|progress
+categ_matrix1|stem|categ_matrix1|0|started
+categ_matrix1|stem|categ_matrix1|0|built
+categ_matrix2|stem|categ_matrix2|0|started
+categ_matrix2|stem|categ_matrix2|0|built
+expd_matrix1|stem|expd_matrix1|0|started
+expd_matrix1|stem|expd_matrix1|0|built
+expd_matrix2|stem|expd_matrix2|0|started
+expd_matrix2|stem|expd_matrix2|0|built
 report|stem|report|0|started
 report|stem|report|0|built

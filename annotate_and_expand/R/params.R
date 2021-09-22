@@ -31,8 +31,8 @@ p.inFile2="data/prots.csv"    # csv file with raw data from a second omics sourc
 ##
 
 p.resultsDir = "results"  ## results folder
-p.outTag1 = ".data1"       ## tag to be added to the outputs created
-p.outTag2 = ".data2"       ## tag to be added to the outputs created
+p.outTag1 = ".genes"       ## tag to be added to the outputs created
+p.outTag2 = ".prots"       ## tag to be added to the outputs created
 
 
 ############################################################

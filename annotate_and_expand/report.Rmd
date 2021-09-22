@@ -207,6 +207,7 @@ Samples in COLUMNS: **`r ncol(tar_read(expd_matrix1))`** (for *`r p.inFile1`*)
 
 Samples in COLUMNS: **`r ncol(tar_read(expd_matrix2))`** (for *`r p.inFile2`*)
 
+
 (Showing only partial output)
 ```{r out.width = '95%'}
 tail(tar_read(expd_matrix1), ncol(categ_matrix1))[,1:10]
