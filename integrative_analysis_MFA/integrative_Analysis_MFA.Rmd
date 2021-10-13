@@ -1,0 +1,74 @@
+---
+title: "Integrative Analysis using MFA"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Introduction
+
+Files `mRNA.csv` and `prots.csv` contain expression values from genes and proteins selected for being differentially expressed  from a TCGA breast cancer dataset.
+
+```{r}
+load("~/Dropbox (Nuevo Equipo VHIR10)/SotaCV/IODA-scripts/integrative_analysis_mixomics/data/expanded.matrix.genes.Rda")
+matGenes <- expanded.matrix
+dplyr::glimpse(matGenes)
+tail(rownames(matGenes))
+load("~/Dropbox (Nuevo Equipo VHIR10)/SotaCV/IODA-scripts/integrative_analysis_mixomics/data/expanded.matrix.prots.Rda")
+matProts <- expanded.matrix
+dplyr::glimpse(matProts)
+tail(rownames(matProts))
+```
+
+# Applying MFA
+
+## Data preparation
+
+The expanded matrices contain either genes or proteins and a set of new variables derived from the selected annotations for each dataset.
+
+```{r}
+sum(colnames(matGenes)!=colnames(matProts))
+numGOsInGenes <- sum(substr(rownames(matGenes),1,3) %in% "GO:")
+numGOsInProts <- sum(substr(rownames(matProts),1,3) %in% "GO:")
+numGenes <- nrow(matGenes) - numGOsInGenes
+numProts <- nrow(matProts) - numGOsInProts
+```
+
+There are:
+
+- `ncol(matGenes)` samples,
+- `numGenes` genes,
+- `numGOsInGenes` annotations in the _expanded gene matrix_,
+- `numProts` proteins,
+- `numGOsInProts` annotations in the _expanded protein matrix_.
+
+In order to apply MFA we need a unique matrix with obtained by merging both datasets through its common dimension, which is set to be "rows", transposing the original matrices.
+
+
+```{r}
+onlyGenes <- t(matGenes)[,1:numGenes]
+onlyProts <- t(matProts)[,1:numProts]
+jointBasicData <- cbind(onlyGenes, onlyProts)
+dplyr::glimpse(jointBasicData)
+jointExpandedData <- cbind(t(matGenes), t(matProts))
+dplyr::glimpse(jointExpandedData)
+```
+## Applying MFA
+
+```{r}
+library(FactoMineR)
+grupsBasic <- c(numGenes,numProts)
+names(grupsBasic) <- c("genes", "prots")
+grupsExpanded <- c(numGenes,numGOsInGenes,numProts, numGOsInProts)
+names(grupsExpanded) <- c("genes", "geneAnots", "prots", "protAnots")
+```
+
+```{r}
+resMFAbasic<- MFA (base=jointBasicData, group=grupsBasic)
+```
+
+
+```{r}
+resMFAexpanded<- MFA (base=jointExpandedData, group=grupsExpanded)
+```
+
