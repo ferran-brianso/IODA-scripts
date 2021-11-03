@@ -64,11 +64,14 @@ names(grupsExpanded) <- c("genes", "prots", "geneAnots", "protAnots")
 ```
 
 ```{r}
-resMFAbasic<- MFA (base=jointBasicData, group=grupsBasic)
+resMFAbasic<- MFA (base=jointBasicData, group=grupsBasic, name.group = names(grupsBasic))
 ```
 
 
 ```{r}
-resMFAexpanded<- MFA (base=jointExpandedData, group=grupsExpanded)
+resMFAexpanded<- MFA (base=jointExpandedData, group=grupsExpanded, name.group = names(grupsExpanded))
 ```
+
+
+
 
