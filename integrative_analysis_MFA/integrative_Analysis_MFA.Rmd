@@ -10,11 +10,11 @@ output:
 Files `mRNA.csv` and `prots.csv` contain expression values from genes and proteins selected for being differentially expressed  from a TCGA breast cancer dataset.
 
 ```{r}
-load("~/Dropbox (Nuevo Equipo VHIR10)/SotaCV/IODA-scripts/integrative_analysis_mixomics/data/expanded.matrix.genes.Rda")
+load("../integrative_analysis_mixomics/data/expanded.matrix.genes.Rda")
 matGenes <- expanded.matrix
 dplyr::glimpse(matGenes)
 tail(rownames(matGenes))
-load("~/Dropbox (Nuevo Equipo VHIR10)/SotaCV/IODA-scripts/integrative_analysis_mixomics/data/expanded.matrix.prots.Rda")
+load("../integrative_analysis_mixomics/data/expanded.matrix.prots.Rda")
 matProts <- expanded.matrix
 dplyr::glimpse(matProts)
 tail(rownames(matProts))
@@ -59,8 +59,8 @@ dplyr::glimpse(jointExpandedData)
 library(FactoMineR)
 grupsBasic <- c(numGenes,numProts)
 names(grupsBasic) <- c("genes", "prots")
-grupsExpanded <- c(numGenes,numGOsInGenes,numProts, numGOsInProts)
-names(grupsExpanded) <- c("genes", "geneAnots", "prots", "protAnots")
+grupsExpanded <- c(numGenes,numProts,numGOsInGenes,numGOsInProts)
+names(grupsExpanded) <- c("genes", "prots", "geneAnots", "protAnots")
 ```
 
 ```{r}
