@@ -120,9 +120,16 @@ Annotated categories: **`r ncol(tar_read(categ_matrix1))`** (for *`r p.inFile1`*
 
 Annotated categories: **`r ncol(tar_read(categ_matrix2))`** (for *`r p.inFile2`*)
 
+Shared annotated categories: **`r intersect(colnames(categ_matrix1), colnames(categ_matrix2))`**
+
+
+(Showing only partial output)
 ```{r out.width = '95%'}
 tar_read(categ_sums1)
 tar_read(categ_sums2)
+head(tar_read(categ_intersect1))
+head(tar_read(categ_intersect2))
+tar_read(categ_intersect)
 ```
 
 Features in ROWS: **`r nrow(tar_read(annot_matrix1))`** (for *`r p.inFile1`*)
@@ -189,7 +196,7 @@ p
 ```
 
 
-### Expanded Matrix
+### Expanded Matrices
 
 Gene Ontology used: **`r p.GO.onto`**
 
@@ -208,11 +215,47 @@ Samples in COLUMNS: **`r ncol(tar_read(expd_matrix1))`** (for *`r p.inFile1`*)
 Samples in COLUMNS: **`r ncol(tar_read(expd_matrix2))`** (for *`r p.inFile2`*)
 
 
+
 (Showing only partial output)
 ```{r out.width = '95%'}
-tail(tar_read(expd_matrix1), ncol(categ_matrix1))[,1:10]
-tail(tar_read(expd_matrix2), ncol(categ_matrix2))[,1:10]
+tail(tar_read(expd_matrix1), ncol(categ_matrix1))[,1:6]
+tail(tar_read(exc_exp_mat1), ncol(categ_matrix1))[,1:6]
+dim(tar_read(exc_exp_mat1))
+tail(tar_read(expd_matrix2), ncol(categ_matrix2))[,1:6]
+tail(tar_read(exc_exp_mat2), ncol(categ_matrix2))[,1:6]
+dim(tar_read(exc_exp_mat2))
+tail(tar_read(int_exp_mat), 10)[,1:6]
+dim(tar_read(int_exp_mat))
 ```
+
+### Heatmap (of intersect matrix, after expansion)
+
+Features+Categs in ROWS; Samples in COLUMNS
+
+```{r Heatmap.Inter, out.width = '95%'}
+p <- heatmaply(int_exp_mat, 
+        #dendrogram = "row",
+        xlab = "", ylab = "", 
+        main = "",
+        scale = "none",
+        margins = c(60,100,40,20),
+        #grid_color = "white",
+        #grid_width = 0,
+        titleX = FALSE,
+        hide_colorbar = FALSE,
+        branches_lwd = 0.1,
+        label_names = c("Feature", "Sample", "Value"),
+        fontsize_row = 5, fontsize_col = 5,
+        labCol = colnames(int_exp_mat),
+        labRow = rownames(int_exp_mat),
+        heatmap_layers = theme(axis.line=element_blank())
+        )
+p
+# save the widget
+# library(htmlwidgets)
+# saveWidget(p, file= "~/.../heatmap.html")
+```
+
 
 ### Heatmap (after row expansion) 
 

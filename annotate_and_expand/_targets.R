@@ -79,7 +79,23 @@ list(
     get_categ_matrix(onto=p.GO.onto, resultsDir=p.resultsDir, N=p.GO.miN, df=dframe2, 
                      afile=p.annotFile, outTag = p.outTag2) 
   ),
+
   
+  tar_target(
+    categ_intersect1,
+    categ_matrix1[, intersect(colnames(categ_matrix1), colnames(categ_matrix2))]
+  ),
+
+  tar_target(
+    categ_intersect2,
+    categ_matrix2[, intersect(colnames(categ_matrix1), colnames(categ_matrix2))]
+  ),
+
+  tar_target(
+    categ_intersect,
+    rbind(categ_intersect1, categ_intersect2)
+  ),
+    
   ## 04- Recompte de gens anotats per categoria (amb valor 1)
   tar_target(
     categ_sums1, 
@@ -106,6 +122,7 @@ list(
     cbind(data.matrix(dframe2), categ_matrix2)
   ),
 
+
   ## 06- Expansio de files afegint les mitjanes dels valors de les categories anotades
   tar_target(
     expd_matrix1,
@@ -123,6 +140,35 @@ list(
                         method="mean", outTag = p.outTag2) 
   ),
 
+  tar_target(
+    exc_exp_mat1,
+    get_exclusive_expmat(annot_matrix1, annot_matrix2, p.resultsDir,
+                        s.cols = 1:ncol(dframe1), # range of cols containing samples
+                        c.cols1 = (ncol(dframe1)+1):(ncol(dframe1)+ncol(categ_matrix1)), # idem for categs
+                        c.cols2 = (ncol(dframe2)+1):(ncol(dframe2)+ncol(categ_matrix2)), # idem for categs
+                        outTag = p.outTag1) 
+  ),
+  
+  tar_target(
+    exc_exp_mat2,
+    get_exclusive_expmat(annot_matrix2, annot_matrix1, p.resultsDir,
+                           s.cols = 1:ncol(dframe2), # range of cols containing samples
+                           c.cols1 = (ncol(dframe2)+1):(ncol(dframe2)+ncol(categ_matrix2)), # idem for categs
+                           c.cols2 = (ncol(dframe1)+1):(ncol(dframe1)+ncol(categ_matrix1)), # idem for categs
+                           outTag = p.outTag2) 
+  ),
+  
+  tar_target(
+    int_exp_mat,
+    get_intersect_expmat(annot_matrix1, annot_matrix2, p.resultsDir,
+                         s.cols = 1:ncol(dframe1), # range of cols containing samples
+                         c.cols1 = (ncol(dframe1)+1):(ncol(dframe1)+ncol(categ_matrix1)), # idem for categs
+                         c.cols2 = (ncol(dframe2)+1):(ncol(dframe2)+ncol(categ_matrix2)), # idem for categs
+                         wt1 = 0.5, wt2 = 0.5) 
+  ),
+  
+  
+  
   # ## Per crear el heat map amb ggplot2 de les dades expandides
   # tar_target(
   #   expd_hmplot, 
