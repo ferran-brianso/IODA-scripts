@@ -13,13 +13,15 @@ library(ggplot2)
 library(stats)
 
 
-set_dframe <- function(my.data) {
+set_dframe <- function(my.data, resultsDir, outTag) {
   ## expected input: samples in rows (1st column is sample name!!)
   ## feature ids in the remaining columns
   ## RETURNS: a data frame with FEATURES in ROWS and SAMPLES in COLUMNS
   my.frame <- as.data.frame(my.data)
   rownames(my.frame) <- my.frame$sample
   my.frame <- my.frame[ ,-1]
+  my.matrix <- t(as.matrix(my.frame))
+  save(my.matrix, file = file.path(resultsDir, paste0("input.matrix", outTag, ".Rda")))
   return(t(my.frame))
 }
 

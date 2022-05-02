@@ -164,7 +164,7 @@ list(
                          s.cols = 1:ncol(dframe1), # range of cols containing samples
                          c.cols1 = (ncol(dframe1)+1):(ncol(dframe1)+ncol(categ_matrix1)), # idem for categs
                          c.cols2 = (ncol(dframe2)+1):(ncol(dframe2)+ncol(categ_matrix2)), # idem for categs
-                         wt1 = 0.5, wt2 = 0.5) 
+                         wt1 = 0.25, wt2 = 0.75) 
   ),
   
   
