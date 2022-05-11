@@ -1,0 +1,178 @@
+---
+title: "Integrative Analysis using MFA"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Introduction
+
+Files `mRNA.csv` and `prots.csv` contain expression values from genes and proteins selected for being differentially expressed  from a TCGA breast cancer dataset.
+
+```{r}
+load("./datasets/input.matrix.genes.Rda")
+matGenes <- my.matrix; dim(matGenes)
+load("./datasets/input.matrix.prots.Rda")
+matProts <- my.matrix; dim(matProts)
+load("./datasets/exclusive.matrix.genes.Rda")
+AnotsOnlyGenes <- exclusive_expmat; dim(AnotsOnlyGenes)
+load("./datasets/exclusive.matrix.prots.Rda")
+AnotsOnlyProts <- exclusive_expmat; dim(AnotsOnlyProts)
+load("./datasets/intersect.matrix.Rda")
+AnotsProtsAndGenes <- intersect.matrix; dim(AnotsProtsAndGenes)
+```
+
+# Applying MFA
+
+While the application of MFA is that of an exploratory analysis, so that there is no unique approach the list provided by [Husson et Josse (2010)](https://www.r-project.org/conferences/useR-2010/tutorials/Husson+Josse.pdf) is a useful "checklist" to organize the analysis:
+
+0. Define the structure of the data (groups of variables and/or individuals)
+1. Define groups of active and supplementary variables
+2. Scale or not the variables
+3. Perform MFA
+4. Choose the number of dimensions to interpret
+5. Simultaneously interpret the individuals and variables graphs
+6. Study the groups of variables
+7. Study the partial representations
+8. Use indicators to enrich the interpretation
+
+## Data structure: defining groups
+
+The expanded matrices contain either genes or proteins and a set of new variables derived from the selected annotations for each dataset.
+
+```{r}
+sum(colnames(matGenes)!=colnames(matProts))
+```
+
+There are:
+
+- `ncol(matGenes)` samples,
+- `numGenes` genes,
+- `numGOsInGenes` annotations in the _expanded gene matrix_,
+- `numProts` proteins,
+- `numGOsInProts` annotations in the _expanded protein matrix_.
+
+In order to apply MFA we need a unique matrix obtained by merging both datasets through its common dimension, which is set to be "rows", transposing the original matrices.
+
+Define the dataset(s)
+```{r}
+jointBasicData <- cbind(t(matGenes), 
+                        t(matProts))
+jointBasicDataScaled <- cbind(scale(t(matGenes)), 
+                        scale(t(matProts)))
+
+jointExpandedData <- cbind(t(matGenes), 
+                        t(matProts),
+                        t(AnotsOnlyGenes) , 
+                        t(AnotsOnlyProts),
+                        t(AnotsProtsAndGenes))
+jointExpandedDataScaled <- cbind(scale(t(matGenes)), 
+                        scale(t(matProts)),
+                        scale(t(AnotsOnlyGenes)), 
+                        scale(t(AnotsOnlyProts)),
+                        scale(t(AnotsProtsAndGenes)))
+```
+
+Groups are defined implicitly by the (number of) columns of the data matrix they are made of.
+
+
+```{r}
+numGenes <- ncol(t(matGenes))
+numProts <- ncol(t(matProts))
+numAnotsOnlyGenes <- ncol(t(AnotsOnlyGenes))
+numAnotsOnlyProts <- ncol(t(AnotsOnlyProts))
+numAnotsProtsAndGenes <- ncol(t(AnotsProtsAndGenes))
+grupsBasic <- c(numGenes,numProts)
+grupsExpanded <- c(numGenes,numProts,numAnotsOnlyGenes,numAnotsOnlyProts,  numAnotsProtsAndGenes)
+```
+
+Each group is given a name and it may be given a data type and a color.
+
+```{r}
+basicNames <- names(grupsBasic) <- c("genes", "prots")
+expandedNames <- names(grupsExpanded) <- c("genes", "prots", "geneAnots", "protAnots", "commonAnots")
+basicTypes <- c("c", "c")
+expandedTypes <-c(rep("c", 5))
+basicPalette <- c("yellow","red")
+expandedPalette <- c("yellow","red","blue","orange","darkviolet")
+```
+
+## Defining active and suplementary variables
+
+Variables describing biological knowledge are linear combinations of one or more omics variable types so it seems reasonable to start considering these as supplementary.
+
+Supplementary groups are described by the index of the group in the vector that defines how many variables in each groups.
+
+```{r}
+supplGroups <- c(3,4,5)
+```
+
+## Scaling the variables
+
+A quick check at the numerical part of the dataset can suggest if the data needs to be centered/scaled.
+
+```{r}
+boxplot(jointBasicData, col=basicPalette, cex.axis=0.6, las=2)
+boxplot(jointBasicDataScaled, col=basicPalette, cex.axis=0.6, las=2)
+```
+
+```{r}
+boxplot(jointExpandedData, col=expandedPalette, cex.axis=0.5, las=2)
+boxplot(jointExpandedDataScaled, col=ExpandedPalette, cex.axis=0.6, las=2)
+```
+
+## Applying MFA
+
+MFA is applied on the "expanded" matrix formed by expressions and annotations, that has been previously scaled.
+
+```{r}
+library(FactoMineR)
+res.mfa<- MFA (base=jointExpandedDataScaled, 
+                      group=grupsExpanded, 
+                      name.group = names(grupsExpanded),
+                      type=expandedTypes,
+                      num.group.sup = supplGroups, graph=FALSE)
+```
+
+```{r}
+dimdesc(res.mfa)
+```
+
+
+## Representation of Groups
+
+```{r}
+plot(res.mfa,choix="group",palette=palette())
+```
+
+## Study of individuals and variables
+
+```{r}
+plot(res.mfa,choix="var",
+     #invisible="quanti.sup",
+     hab="group",
+     lab.var=TRUE, lim.cos2.var = 0.6, 
+     palette=palette())
+```
+
+
+```{r}
+plot(res.mfa,choix="ind",partial="all",habillage="group",palette=palette())
+```
+
+
+```{r}
+plot(res.mfa,choix="axes",habillage="group",palette=palette())
+```
+
+
+## Automatic interpretation with `FactoInvestigate`
+
+```{r}
+library(FactoInvestigate)
+Investigate(res.mfa)
+```
+
+
+
+
