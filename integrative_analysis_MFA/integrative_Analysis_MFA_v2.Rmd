@@ -1,0 +1,83 @@
+---
+title: "Integrative Analysis using MFA (v2. using 5 data sets after expansion)"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Introduction
+
+Files `exclusive.matrix.genes.Rda` and `exclusive.matrix.prots.Rda` contain expression values from genes and proteins selected for being differentially expressed  from a TCGA breast cancer dataset, plus (in additional rows) the new features coming from the respective annotation processes already performed with `annotate_and_expand` script.
+File `intersect.matrix.Rda` contains only new features coming from the biological annotations in common between both data sources.
+
+```{r}
+load("../annotate_and_expand/results/input.matrix.genes.Rda", verbose = T)
+matGenes <- my.matrix
+dplyr::glimpse(matGenes)
+tail(rownames(matGenes))
+
+load("../annotate_and_expand/results/input.matrix.prots.Rda", verbose = T)
+matProts <- my.matrix
+dplyr::glimpse(matProts)
+tail(rownames(matProts))
+
+load("../annotate_and_expand/results/exclusive.matrix.genes.Rda", verbose = T)
+annotGenes <- exclusive_expmat
+dplyr::glimpse(annotGenes)
+tail(rownames(annotGenes))
+
+load("../annotate_and_expand/results/exclusive.matrix.prots.Rda", verbose = T)
+annotProts <- exclusive_expmat
+dplyr::glimpse(annotProts)
+tail(rownames(annotProts))
+
+load("../annotate_and_expand/results/intersect.matrix.Rda", verbose = T)
+annotCommon <- intersect.matrix
+dplyr::glimpse(annotCommon)
+tail(rownames(annotCommon))
+
+```
+
+# Applying MFA
+
+## Data preparation
+
+The loaded matrices contain numeric values for either genes, proteins or a set of new variables (GO or similar annotations) derived from the selected annotations from each data set or the intersection between them.
+
+```{r}
+sum(colnames(matGenes)!=colnames(matProts))
+sum(colnames(matProts)!=colnames(annotGenes))
+sum(colnames(annotGenes)!=colnames(annotProts))
+sum(colnames(annotProts)!=colnames(annotCommon))
+#colnames(annotCommon)
+
+numSamples <- ncol(annotGenes)
+numGenes <- nrow(matGenes)
+numProts <- nrow(matProts)
+numGOsInGenes <- nrow(annotGenes)
+numGOsInProts <- nrow(annotProts)
+numGOsInCommon <- nrow(annotCommon)
+
+```
+
+There are:
+
+- `r numSamples` samples,
+- `r numGenes` genes,
+- `r numGOsInGenes` annotation-derived features in the _exclusive annotations from gene matrix_,
+- `r numProts` proteins,
+- `r numGOsInProts` annotation-derived features in the _exclusive annotations from prots matrix_,
+- `r numGOsInCommon` annotation-derived features from the _intersect annotations from both sources_.
+
+In order to apply MFA we need a unique matrix with obtained by merging all datasets through its common dimension, which is set to be "rows", transposing the original matrices.
+
+
+```{r}
+onlyGenes <- t(matGenes)#[,1:numGenes]
+onlyProts <- t(matProts)#[,1:numProts]
+
+jointBasicData <- cbind(onlyGenes, onlyProts)
+dplyr::glimpse(jointBasicData)
+jointExpandedData <- cbind(t(matGenes), t(matProts))
+dplyr::glimpse(jointExpandedData)
+```
