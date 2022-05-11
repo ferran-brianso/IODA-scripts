@@ -142,9 +142,9 @@ get_exclusive_expmat <- function(x, y, resultsDir, s.cols, c.cols1, c.cols2, out
                                                  rownames(expanded.matrix2)[(nrow(y)+1):(nrow(y)+length(c.cols2))]), ]
   
   exclusive_expmat <- expanded.matrix1[-which(rownames(expanded.matrix1) %in% rownames(intersect.matrix)), ]
+  exclusive_expmat <- exclusive_expmat[(nrow(x)+1):(nrow(exclusive_expmat)), ]
 
-  ## guardo i retorno les matrius expandides
-  #save(intersect.matrix, file = file.path(resultsDir, paste0("intersect.matrix.Rda")))
+  ## guardo i retorno les matrius amb anotacions exclusives
   save(exclusive_expmat, file = file.path(resultsDir, paste0("exclusive.matrix", outTag, ".Rda")))
 
   return(exclusive_expmat)
@@ -191,8 +191,9 @@ get_intersect_expmat <- function(x, y, resultsDir, s.cols, c.cols1, c.cols2, wt1
   intersect.matrix <- intersect.matrix1*wt1 + intersect.matrix2*wt2
     
   ## guardo i retorno les matrius expandides
-  save(intersect.matrix1, file = file.path(resultsDir, paste0("intersect.matrix.Rda")))
-  save(intersect.matrix2, file = file.path(resultsDir, paste0("intersect.matrix.Rda")))
+  save(intersect.matrix, file = file.path(resultsDir, paste0("intersect.matrix.Rda")))
+  save(intersect.matrix1, file = file.path(resultsDir, paste0("intersect.matrix1.Rda")))
+  save(intersect.matrix2, file = file.path(resultsDir, paste0("intersect.matrix2.Rda")))
   
   return(intersect.matrix)
 }

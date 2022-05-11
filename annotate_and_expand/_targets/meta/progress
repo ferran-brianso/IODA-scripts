@@ -17,6 +17,7 @@ expd_matrix1|stem|expd_matrix1|0|skipped
 expd_matrix2|stem|expd_matrix2|0|skipped
 exc_exp_mat1|stem|exc_exp_mat1|0|skipped
 exc_exp_mat2|stem|exc_exp_mat2|0|skipped
-int_exp_mat|stem|int_exp_mat|0|skipped
+int_exp_mat|stem|int_exp_mat|0|started
+int_exp_mat|stem|int_exp_mat|0|built
 categ_intersect|stem|categ_intersect|0|skipped
 report|stem|report|0|skipped
