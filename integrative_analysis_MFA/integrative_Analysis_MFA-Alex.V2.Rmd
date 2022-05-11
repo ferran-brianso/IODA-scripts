@@ -118,7 +118,7 @@ boxplot(jointBasicDataScaled, col=basicPalette, cex.axis=0.6, las=2)
 
 ```{r}
 boxplot(jointExpandedData, col=expandedPalette, cex.axis=0.5, las=2)
-boxplot(jointExpandedDataScaled, col=ExpandedPalette, cex.axis=0.6, las=2)
+boxplot(jointExpandedDataScaled, col=expandedPalette, cex.axis=0.6, las=2)
 ```
 
 ## Applying MFA
@@ -134,7 +134,7 @@ res.mfa<- MFA (base=jointExpandedDataScaled,
                       num.group.sup = supplGroups, graph=FALSE)
 ```
 
-```{r}
+```{r eval=FALSE}
 dimdesc(res.mfa)
 ```
 
@@ -166,12 +166,6 @@ plot(res.mfa,choix="axes",habillage="group",palette=palette())
 ```
 
 
-## Automatic interpretation with `FactoInvestigate`
-
-```{r}
-library(FactoInvestigate)
-Investigate(res.mfa)
-```
 
 
 
