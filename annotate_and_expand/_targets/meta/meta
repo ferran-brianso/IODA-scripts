@@ -34,14 +34,12 @@ p.inFile|object|11754877094875ea||||||||||||||
 dframe|stem|5c1e2225a01e52c2|b674759ff84a3a3a|080b89b0fbaaf34d|1203694593||t18853.6197453704s||225394|rds|vector|||0.78||error in evaluating the argument x in selecting a method for function as.data.frame objeto in_data no encontrado
 data_file1|stem|c5351ee6a76e7738|50ff250e5d14eda8|daa428d721be8447|393987570|data/mrna.csv|t18848.5812037037s|44717be6a3f96ccc|546256|file|vector|||0.78||
 in_data1|stem|b750011d3f68311e|f29096aba0ecb23a|af1951d5352886d6|-922429466||t18884.4763016579s|97b7b1f73d8a702b|227970|rds|vector|||1.02||
-dframe1|stem|5c1e2225a01e52c2|c81d1b33ebf00527|bdef16c09625edd7|-1427943348||t18884.4763037126s|d0277d3847d8d3ae|225394|rds|vector|||0.01||
 expd_matrix|stem|ba11bbcc30902577|e2db208d2e11e902|65da823c63df9d5f|-2014576697||t18884.4763089071s|7d419b6509a6ff60|230952|rds|vector|||0.28||
 categ_matrix|stem|34d3a7c9fd7560ff|c25c11efe35bf344|c7257cd73726680d|-425818724||t18884.4763048323s|7d0ea1bd8519ebe1|309|rds|vector|||0.05||
 categ_sums|stem|88cd41479870f636|3114124995af4b70|e631c2518d63da95|-347798884||t18860.3109722222s|113bb5f8c6bea610|172|rds|vector|||0||
 annot_matrix|stem|54efd64f05ebb735|a90da131d05d4fde|aad1980c060c7c5d|-808039264||t18884.4763052017s||225710|rds|vector|||0.8||objeto categ_matrix no encontrado
 data_file2|stem|1088e6cb98502476|845b2a84b5778a1d|00dfd4d3f05ffd47|103686999|data/prots.csv|t18884.6443302011s|f1536d6f80f7ac85|310509|file|vector|||0.63||
 in_data2|stem|2b658f46e650f7fa|ee7c5589eb84a160|406f56b0ba2bd15d|2048539154||t18884.6448315448s|dfd7c422532841eb|129395|rds|vector|||0.11|Duplicated column names deduplicated MAPK1  MAPK1_1 59|
-dframe2|stem|ab9aff5ead7fb592|ffb60ce1753b2438|5a74597ba4e9fa5c|-1062700074||t18884.6448319026s|1cf2537fc21f95d4|128449|rds|vector|||0.02||
 annot_matrix1|stem|02a648eecfc06f98|d86759183edcec79|88ec3b48f4f9359b|-468097273||t18884.644835793s|b26909a433be38ed|225998|rds|vector|||0||
 annot_matrix2|stem|3828949dfb9a1c0b|b9eeccbfd7bdb08e|cd21f10e3ef088b6|1686366174||t18884.6448363813s|711065eadfe01308|130073|rds|vector|||0||
 categ_matrix1|stem|73d2798e92d45b61|c3164bbda68988d5|ce9ae57002d29db0|-901074311||t18892.6055079205s|376551338a459e73|1560|rds|vector|||2.3||
@@ -59,6 +57,10 @@ all3matrices|stem|4e1916207c83dc32|c11703e22eecec0b|025a922674c8aed3|1280411224|
 expand_annot_matrix_v2|function|26804e4f3f45cc63||||||||||||||
 exc_exp_mat1|stem|5e0b07a90e013c99|21b6080dcc4b2378|fc1b33b01aa9f9c4|-610602946||t19107.6468252574s|fc6ea9f774da1739|228557|rds|vector|||1.56||
 exc_exp_mat2|stem|66d7052c41940bc9|0e0bb8deba8c09a4|7913c15065dd1233|-1848943456||t19107.6468303462s|e6e4d4349f56c390|187525|rds|vector|||0.39||
+int_exp_mat|stem|667fb717c384272f|d25c850a225ff164|c4e0a084b34f3dd2|852978144||t19114.5254233998s|fd0545de3f570769|11932|rds|vector|||0.33||
+report|stem|993fdadd8e55c1e8|98fdabe576b62f53|2ac79aff0d2c1ae3|-237041703|report.html*report.Rmd|t19114.5258040469s|b50c7d3970792fb9|17650349|file|vector|||34.04||
+dframe1|stem|5c1e2225a01e52c2|fd92e7bccb68323f|a64fb41727964a07|-1427943348||t19114.5303662944s|d0277d3847d8d3ae|225394|rds|vector|||0.99||
+dframe2|stem|ab9aff5ead7fb592|8b98423a6deb9001|e49583693d247211|-1062700074||t19114.5303669889s|1cf2537fc21f95d4|128449|rds|vector|||0.02||
 get_intersect_expmat|function|20280bdd0e6a7dfc||||||||||||||
 p.resultsDir|object|26a6b9ffae1b7593||||||||||||||
 get_categ_matrix|function|6f171cfedf6696f9||||||||||||||
@@ -66,12 +68,10 @@ p.inFile1|object|11754877094875ea||||||||||||||
 p.inFile2|object|a61ad8f140db109a||||||||||||||
 p.outTag1|object|7529f98a9589e135||||||||||||||
 p.outTag2|object|318ef2d55f9a471b||||||||||||||
-set_dframe|function|3720f2e857d5e9df||||||||||||||
+set_dframe|function|89f9d7c3f23ef510||||||||||||||
 p.annotFile|object|b050cda81a7aabba||||||||||||||
 p.GO.miN|object|9a65e0a43385df34||||||||||||||
-.Random.seed|object|864fc1ec1de2c400||||||||||||||
+.Random.seed|object|9a9662a19fdaa671||||||||||||||
 expand_annot_matrix|function|a87f5b220a4a19f9||||||||||||||
 get_exclusive_expmat|function|79405385eb670900||||||||||||||
 p.GO.onto|object|32564f4f0010e9c0||||||||||||||
-int_exp_mat|stem|4d59afcfbe13c9de|d414fea5efbebab9|c4e0a084b34f3dd2|852978144||t19107.6847398785s|f989f161fe9995e6|11961|rds|vector|||1.36||
-report|stem|760fb371d123a031|98fdabe576b62f53|d17627bfbab1a1dd|-237041703|report.html*report.Rmd|t19107.6851002666s|5ed0db9e9c63fb76|17651784|file|vector|||32.87||
