@@ -1,8 +1,15 @@
 ---
 title: "Integrative Analysis using MFA (v2. using 5 data sets after expansion)"
+author: "Alex S&aacute;nchez-Pla and Ferran Brians&oacute;"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
 output:
   html_document:
-    df_print: paged
+    theme: default
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
 ---
 
 # Introduction
@@ -38,9 +45,27 @@ tail(rownames(annotCommon))
 
 ```
 
-# Applying MFA
 
-## Data preparation
+# Breast cancer subtypes 
+Source [https://www.breastcancer.org/types/molecular-subtypes#section-luminal-a-breast-cancer]
+
+Triple-negative or *basal-like* breast cancer is estrogen receptor-negative, progesterone receptor-negative, and HER2-negative. Triple-negative breast cancer is considered more aggressive than either luminal A or luminal B breast cancer.
+
+*HER2-enriched* breast cancer is estrogen receptor-negative and progesterone receptor-negative and HER2-positive. HER2-enriched cancers tend to grow faster than luminal cancers and can have a worse prognosis, but are usually successfully treated with targeted therapy medicines aimed at the HER2 protein.
+
+*Luminal A* breast cancer is estrogen receptor-positive and progesterone receptor-positive, HER2-negative, and has low levels of the protein Ki-67, which helps control how fast cancer cells grow. Luminal A cancers tend grow more slowly than other cancers, be lower grade, and have a good prognosis.
+
+To get the cancer subtypes: 
+```{r}
+library(mixOmics)
+data("breast.TCGA")
+brca.subtype <- breast.TCGA$data.train$subtype
+brca.subtype
+table(brca.subtype)
+```
+
+
+# Data loading
 
 The loaded matrices contain numeric values for either genes, proteins or a set of new variables (GO or similar annotations) derived from the selected annotations from each data set or the intersection between them.
 
@@ -69,6 +94,22 @@ There are:
 - `r numGOsInProts` annotation-derived features in the _exclusive annotations from prots matrix_,
 - `r numGOsInCommon` annotation-derived features from the _intersect annotations from both sources_.
 
+
+# Preparing MFA
+
+While the application of MFA is that of an exploratory analysis, so that there is no unique approach the list provided by [Husson et Josse (2010)](https://www.r-project.org/conferences/useR-2010/tutorials/Husson+Josse.pdf) is a useful "checklist" to organize the analysis:
+
+0. Define the structure of the data (groups of variables and/or individuals)
+1. Define groups of active and supplementary variables
+2. Scale or not the variables
+3. Perform MFA
+4. Choose the number of dimensions to interpret
+5. Simultaneously interpret the individuals and variables graphs
+6. Study the groups of variables
+7. Study the partial representations
+8. Use indicators to enrich the interpretation
+
+
 In order to apply MFA we need a unique matrix with obtained by merging all datasets through its common dimension, which is set to be "rows", transposing the original matrices.
 
 
@@ -76,8 +117,220 @@ In order to apply MFA we need a unique matrix with obtained by merging all datas
 onlyGenes <- t(matGenes)#[,1:numGenes]
 onlyProts <- t(matProts)#[,1:numProts]
 
-jointBasicData <- cbind(onlyGenes, onlyProts)
+jointBasicData <- cbind(onlyGenes, 
+                        onlyProts)
+jointBasicDataScaled <- cbind(scale(onlyGenes), 
+                              scale(onlyProts))
 dplyr::glimpse(jointBasicData)
-jointExpandedData <- cbind(t(matGenes), t(matProts))
+
+jointExpandedData <- cbind(onlyGenes, 
+                           onlyProts,
+                           t(annotGenes),
+                           t(annotProts),
+                           t(annotCommon))
+jointExpandedDataScaled <- cbind(scale(onlyGenes), 
+                                 scale(onlyProts),
+                                 scale(t(annotGenes)),
+                                 scale(t(annotProts)),
+                                 scale(t(annotCommon))
+                                 )
 dplyr::glimpse(jointExpandedData)
 ```
+
+Groups are defined implicitly by the (number of) columns of the data matrix they are made of.
+
+
+```{r}
+numSamples
+numGenes
+numProts
+numGOsInGenes
+numGOsInProts
+numGOsInCommon
+
+grupsBasic <- c(numGenes,numProts)
+grupsBasic
+grupsExpanded <- c(numGenes,numProts,numGOsInGenes,numGOsInProts,  numGOsInCommon)
+grupsExpanded
+```
+
+Each group is given a name and it may be given a data type and a color.
+
+```{r}
+basicNames <- names(grupsBasic) <- c("genes", "prots")
+expandedNames <- names(grupsExpanded) <- c("genes", "prots", "geneAnots", "protAnots", "commonAnots")
+basicTypes <- c("c", "c")
+expandedTypes <-c(rep("c", 5))
+basicPalette <- c("red", "blue")
+basicPalette2 <- c("black","red", "blue")
+expandedPalette <- c("gray", "red", "blue", "orange", "cyan")
+```
+
+## Defining active/suplementary data
+
+Variables describing biological knowledge are linear combinations of one or more omics variable types so it seems reasonable to start considering these as supplementary.
+
+Supplementary groups are described by the index of the group in the vector that defines how many variables in each groups.
+
+```{r}
+supplGroups <- c(3,4,5)
+```
+
+## Scaling the variables
+
+A quick check at the numerical part of the dataset can suggest if the data needs to be centered/scaled.
+
+```{r}
+boxplot(jointBasicData, col=basicPalette, cex.axis=0.6, las=2)
+boxplot(jointBasicDataScaled, col=basicPalette, cex.axis=0.6, las=2)
+```
+
+```{r}
+boxplot(jointExpandedData, col=expandedPalette, cex.axis=0.5, las=2)
+boxplot(jointExpandedDataScaled, col=expandedPalette, cex.axis=0.6, las=2)
+```
+
+
+# Applying MFA to basic data
+
+MFA is applied on the "basic" matrix formed only by expressions, that has been previously scaled.
+
+```{r}
+library(FactoMineR)
+res.mfa.b <- MFA (base=jointBasicDataScaled, 
+                      group=grupsBasic, 
+                      name.group = names(grupsBasic),
+                      type=basicTypes,
+                      graph=FALSE)
+```
+
+```{r, eval=FALSE}
+dimdesc(res.mfa.b)
+```
+
+
+## Representation of Groups
+
+```{r}
+plot(res.mfa.b,choix="group", palette=basicPalette)
+```
+
+## Study of individuals and variables
+
+```{r}
+plot(res.mfa.b, choix="var",
+     #invisible="quanti.sup",
+     hab="group",
+     lab.var=TRUE, lim.cos2.var = 0.6, 
+     palette=basicPalette2)
+```
+
+
+```{r}
+plot(res.mfa.b,choix="ind",partial="all",habillage="group",palette=basicPalette2)
+```
+
+
+```{r}
+plot(res.mfa.b,choix="axes",habillage="group",palette=basicPalette2)
+```
+
+
+## Indivuals analysis with factoextra
+
+Habillage parameter sets the phenotypes (= cancer subtypes)
+
+
+```{r}
+library(factoextra)
+
+# Variables
+#fviz_mfa_var(res.mfa.b, palette = ...)
+
+# Individuals
+basicPalette3 <- c("coral", "green", "skyblue")
+fviz_mfa_ind(res.mfa.b, habillage = brca.subtype, palette = basicPalette3) # color by groups
+```
+
+
+```{r}
+# Individuals with all vars
+expandedPalette2 <- c("coral", "red", "green", "skyblue", "blue")
+fviz_mfa(res.mfa.b, habillage = brca.subtype, palette =  expandedPalette2)# color by groups
+
+```
+
+
+
+
+
+# Applying MFA to expanded data
+
+MFA is applied on the "expanded" matrix formed by expressions and annotations, that has been previously scaled.
+
+```{r}
+library(FactoMineR)
+res.mfa.x<- MFA (base=jointExpandedDataScaled, 
+                      group=grupsExpanded, 
+                      name.group = names(grupsExpanded),
+                      type=expandedTypes,
+                      num.group.sup = supplGroups, graph=FALSE)
+```
+
+```{r, eval=FALSE}
+dimdesc(res.mfa.x)
+```
+
+
+## Representation of Groups
+
+```{r}
+plot(res.mfa.x,choix="group", palette=expandedPalette)
+```
+
+## Study of individuals and variables
+
+```{r}
+plot(res.mfa.x, choix="var",
+     #invisible="quanti.sup",
+     hab="group",
+     lab.var=TRUE, lim.cos2.var = 0.6, 
+     palette=expandedPalette)
+```
+
+
+```{r}
+plot(res.mfa.x,choix="ind",partial="all",habillage="group",palette=basicPalette2)
+```
+
+
+```{r}
+plot(res.mfa.x,choix="axes",habillage="group",palette=expandedPalette)
+```
+
+
+## Indivuals analysis with factoextra
+
+Habillage parameter sets the phenotypes (= cancer subtypes)
+
+
+```{r}
+library(factoextra)
+
+# Variables
+#fviz_mfa_var(res.mfa.x, palette = ...)
+
+# Individuals
+basicPalette3 <- c("coral", "green", "skyblue")
+fviz_mfa_ind(res.mfa.x, habillage = brca.subtype, palette = basicPalette3) # color by groups
+```
+
+
+```{r}
+# Individuals with all vars
+expandedPalette2 <- c("coral", "red", "green", "skyblue", "blue")
+fviz_mfa(res.mfa.x, habillage = brca.subtype, palette =  expandedPalette2)# color by groups
+
+```
+
+
