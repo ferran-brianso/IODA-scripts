@@ -150,20 +150,17 @@ numGOsInCommon
 
 grupsBasic <- c(numGenes,numProts)
 grupsBasic
-grupsExpanded <- c(numGenes,numProts,numGOsInGenes,numGOsInProts,  numGOsInCommon)
+grupsExpanded <- c(numGenes,numProts,numGOsInGenes,numGOsInProts,numGOsInCommon)
 grupsExpanded
 ```
 
-Each group is given a name and it may be given a data type and a color.
+Each group is given a name and it may be given a data type.
 
 ```{r}
 basicNames <- names(grupsBasic) <- c("genes", "prots")
 expandedNames <- names(grupsExpanded) <- c("genes", "prots", "geneAnots", "protAnots", "commonAnots")
 basicTypes <- c("c", "c")
 expandedTypes <-c(rep("c", 5))
-basicPalette <- c("red", "blue")
-basicPalette2 <- c("black","red", "blue")
-expandedPalette <- c("gray", "red", "blue", "orange", "cyan")
 ```
 
 ## Defining active/suplementary data
@@ -181,13 +178,17 @@ supplGroups <- c(3,4,5)
 A quick check at the numerical part of the dataset can suggest if the data needs to be centered/scaled.
 
 ```{r}
-boxplot(jointBasicData, col=basicPalette, cex.axis=0.6, las=2)
-boxplot(jointBasicDataScaled, col=basicPalette, cex.axis=0.6, las=2)
+pal <- c(rep("blue",numGenes), rep("red", numProts))
+boxplot(jointBasicData, col=pal, cex.axis=0.6, las=2)
+boxplot(jointBasicDataScaled, col=pal, cex.axis=0.6, las=2)
 ```
 
 ```{r}
-boxplot(jointExpandedData, col=expandedPalette, cex.axis=0.5, las=2)
-boxplot(jointExpandedDataScaled, col=expandedPalette, cex.axis=0.6, las=2)
+pal <- c(rep("blue",numGenes), rep("red", numProts), 
+         rep("cyan", numGOsInGenes), rep("orange", numGOsInProts), 
+         rep("darkmagenta", numGOsInCommon))
+boxplot(jointExpandedData, col=pal, cex.axis=0.5, las=2)
+boxplot(jointExpandedDataScaled, col=pal, cex.axis=0.4, las=2)
 ```
 
 
@@ -196,7 +197,7 @@ boxplot(jointExpandedDataScaled, col=expandedPalette, cex.axis=0.6, las=2)
 MFA is applied on the "basic" matrix formed only by expressions, that has been previously scaled.
 
 ```{r}
-library(FactoMineR)
+require(FactoMineR)
 res.mfa.b <- MFA (base=jointBasicDataScaled, 
                       group=grupsBasic, 
                       name.group = names(grupsBasic),
@@ -212,7 +213,7 @@ dimdesc(res.mfa.b)
 ## Representation of Groups
 
 ```{r}
-plot(res.mfa.b,choix="group", palette=basicPalette)
+plot(res.mfa.b,choix="group", palette=c("red", "blue"))
 ```
 
 ## Study of individuals and variables
@@ -221,18 +222,18 @@ plot(res.mfa.b,choix="group", palette=basicPalette)
 plot(res.mfa.b, choix="var",
      #invisible="quanti.sup",
      hab="group",
-     lab.var=TRUE, lim.cos2.var = 0.6, 
-     palette=basicPalette2)
+     lab.var=TRUE, lim.cos2.var = 0.5, 
+     palette=c("black","blue", "red"))
 ```
 
 
 ```{r}
-plot(res.mfa.b,choix="ind",partial="all",habillage="group",palette=basicPalette2)
+plot(res.mfa.b,choix="ind",partial="all",habillage="group",palette=c("black","blue", "red"))
 ```
 
 
 ```{r}
-plot(res.mfa.b,choix="axes",habillage="group",palette=basicPalette2)
+plot(res.mfa.b,choix="axes",habillage="group",palette=c("black","blue", "red"))
 ```
 
 
@@ -248,19 +249,16 @@ library(factoextra)
 #fviz_mfa_var(res.mfa.b, palette = ...)
 
 # Individuals
-basicPalette3 <- c("coral", "green", "skyblue")
-fviz_mfa_ind(res.mfa.b, habillage = brca.subtype, palette = basicPalette3) # color by groups
+pal <- c("green", "coral", "skyblue")
+fviz_mfa_ind(res.mfa.b, habillage = brca.subtype, palette = pal) # color by cancer subtype
 ```
 
 
 ```{r}
 # Individuals with all vars
-expandedPalette2 <- c("coral", "red", "green", "skyblue", "blue")
-fviz_mfa(res.mfa.b, habillage = brca.subtype, palette =  expandedPalette2)# color by groups
-
+pal <- c("green", "blue", "coral", "skyblue", "red")
+fviz_mfa(res.mfa.b, habillage = brca.subtype, palette = pal)# color by groups
 ```
-
-
 
 
 
@@ -269,7 +267,7 @@ fviz_mfa(res.mfa.b, habillage = brca.subtype, palette =  expandedPalette2)# colo
 MFA is applied on the "expanded" matrix formed by expressions and annotations, that has been previously scaled.
 
 ```{r}
-library(FactoMineR)
+require(FactoMineR)
 res.mfa.x<- MFA (base=jointExpandedDataScaled, 
                       group=grupsExpanded, 
                       name.group = names(grupsExpanded),
@@ -285,27 +283,30 @@ dimdesc(res.mfa.x)
 ## Representation of Groups
 
 ```{r}
-plot(res.mfa.x,choix="group", palette=expandedPalette)
+pal <- c("darkmagenta", "blue", "red", "cyan", "orange")
+plot(res.mfa.x,choix="group", palette=pal)
 ```
 
 ## Study of individuals and variables
 
 ```{r}
+pal <- c("darkmagenta", "blue", "red", "cyan", "orange")
 plot(res.mfa.x, choix="var",
      #invisible="quanti.sup",
      hab="group",
-     lab.var=TRUE, lim.cos2.var = 0.6, 
-     palette=expandedPalette)
+     lab.var=TRUE, lim.cos2.var = 0.5, 
+     palette=pal)
 ```
 
 
 ```{r}
-plot(res.mfa.x,choix="ind",partial="all",habillage="group",palette=basicPalette2)
+plot(res.mfa.x,choix="ind",partial="all",habillage="group",palette=c("black", "blue", "red"))
 ```
 
 
 ```{r}
-plot(res.mfa.x,choix="axes",habillage="group",palette=expandedPalette)
+pal <- c("black", "blue", "red", "cyan", "orange", "darkmagenta")
+plot(res.mfa.x,choix="axes",habillage="group",palette=pal)
 ```
 
 
@@ -321,16 +322,109 @@ library(factoextra)
 #fviz_mfa_var(res.mfa.x, palette = ...)
 
 # Individuals
-basicPalette3 <- c("coral", "green", "skyblue")
-fviz_mfa_ind(res.mfa.x, habillage = brca.subtype, palette = basicPalette3) # color by groups
+pal <- c("green", "coral", "skyblue")
+fviz_mfa_ind(res.mfa.x, habillage = brca.subtype, palette = pal) # color by cancer subtype
 ```
 
 
 ```{r}
 # Individuals with all vars
-expandedPalette2 <- c("coral", "red", "green", "skyblue", "blue")
-fviz_mfa(res.mfa.x, habillage = brca.subtype, palette =  expandedPalette2)# color by groups
+pal <- c("green", "blue", "coral", "skyblue", "red")
+fviz_mfa(res.mfa.x, habillage = brca.subtype, palette =  pal)# color by groups
 
 ```
 
+# MFA redefining active/supplem. data
 
+Now, we consider the group of features created from common annotations between genes and proteins also as principal data to the MFA analysis.
+
+As said before, supplementary groups are described by the index of the group in the vector that defines how many variables in each groups.
+In this case, we remove group 5 from the supplementary list.
+
+```{r}
+new.supplGroups <- c(3,4)
+```
+
+
+MFA is applied on the "expanded" matrix formed by expressions and annotations, that has been previously scaled.
+
+```{r}
+require(FactoMineR)
+res.mfa.x2 <- MFA (base=jointExpandedDataScaled, 
+                      group=grupsExpanded, 
+                      name.group = names(grupsExpanded),
+                      type=expandedTypes,
+                      num.group.sup = new.supplGroups, graph=FALSE)
+```
+
+```{r, eval=FALSE}
+dimdesc(res.mfa.x2)
+```
+
+
+## Representation of Groups
+
+```{r}
+pal <- c("orange", "blue", "red", "darkmagenta", "cyan")
+plot(res.mfa.x2,choix="group", palette=pal)
+```
+
+## Study of individuals and variables
+
+```{r}
+pal <- c("orange", "blue", "red", "darkmagenta", "cyan")
+plot(res.mfa.x2, choix="var",
+     #invisible="quanti.sup",
+     hab="group",
+     lab.var=TRUE, lim.cos2.var = 0.5, 
+     palette=pal)
+```
+
+Common annotations
+
+GO:0019221 = cytokine-mediated signaling pathway
+GO:0007165 = signal transduction
+GO:0006357 = regulation of transcription by RNA polymerase II
+GO:0045944 = positive regulation of transcription by RNA polymerase II
+
+Gene annotations
+
+GO:0006977 = DNA damage response, signal transduction by p53 class mediator resulting in cell cycle arrest
+GO:0032355 = response to estradiol
+
+
+```{r}
+pal <- c("black", "blue", "red", "darkmagenta")
+plot(res.mfa.x2,choix="ind",partial="all",habillage="group",palette=pal)
+```
+
+
+```{r}
+pal <- c("black", "blue", "red", "darkmagenta", "cyan", "orange")
+plot(res.mfa.x2,choix="axes",habillage="group",palette=pal)
+```
+
+
+## Indivuals analysis with factoextra
+
+Habillage parameter sets the phenotypes (= cancer subtypes)
+
+
+```{r}
+library(factoextra)
+
+# Variables
+#fviz_mfa_var(res.mfa.x, palette = ...)
+
+# Individuals
+pal <- c("green", "coral", "skyblue")
+fviz_mfa_ind(res.mfa.x2, habillage = brca.subtype, palette = pal) # color by cancer subtype
+```
+
+
+```{r}
+# Individuals with all vars
+pal <- c("green", "darkmagenta", "blue", "coral", "skyblue", "red")
+fviz_mfa(res.mfa.x2, habillage = brca.subtype, palette =  pal)# color by groups
+
+```
