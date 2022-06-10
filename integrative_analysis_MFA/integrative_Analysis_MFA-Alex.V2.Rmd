@@ -134,7 +134,11 @@ res.mfa<- MFA (base=jointExpandedDataScaled,
                       num.group.sup = supplGroups, graph=FALSE)
 ```
 
+<<<<<<< HEAD
 ```{r, eval=FALSE}
+=======
+```{r eval=FALSE}
+>>>>>>> 507a7a4747a4b3f2544105e0bd54b3072adfe386
 dimdesc(res.mfa)
 ```
 
@@ -166,12 +170,6 @@ plot(res.mfa,choix="axes",habillage="group",palette=palette())
 ```
 
 
-## Automatic interpretation with `FactoInvestigate`
-
-```{r}
-library(FactoInvestigate)
-Investigate(res.mfa)
-```
 
 
 
