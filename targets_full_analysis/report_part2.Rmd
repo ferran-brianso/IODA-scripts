@@ -1,0 +1,339 @@
+---
+title: "Report with results from the full analysis script (v.1)"
+author: Ferran Brianso
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float: TRUE
+    theme: united
+---
+
+Targets' report corresponding to the functions that perform the full analysis, consisting in two parts:
+
+1. Annotate any original expression matrix (with gene symbols as ids in rows, and sample ids in columns) and expands the annotated matrix to include the average (or sum) values for the annotations (as new extra rows).
+
+2. Perform basic MFA analysis (as in "integrative_Analysis_MFA_v2.Rmd") ...
+
+
+```{r libraries, echo=FALSE}
+library(ggplot2)
+library(heatmaply)
+library(targets)
+library(stats)
+library(dplyr)
+```
+
+```{r set-options, echo=FALSE, cache=FALSE}
+options(width = 110)
+```
+
+### Raw data (before data prep) 
+
+Data loaded from files **`r p.inFile1`** and **`r p.inFile2`**
+
+Samples in rows; Features in columns 
+
+```{r out.width = '95%', echo=FALSE}
+show(tar_read(in_data1))
+show(tar_read(in_data2))
+```
+
+### Data frame (before annotation) 
+
+Input from **`r p.inFile1`**:
+Features in ROWS: **`r nrow(tar_read(dframe1))`**
+Samples in COLUMNS: **`r ncol(tar_read(dframe1))`**
+
+Input from **`r p.inFile2`**:
+Features in ROWS: **`r nrow(tar_read(dframe2))`**
+Samples in COLUMNS: **`r ncol(tar_read(dframe2))`**
+
+
+(Showing only partial output)
+```{r out.width = '95%'}
+tar_read(dframe1)[1:10,1:10]
+tar_read(dframe2)[1:10,1:10]
+```
+
+### Heatmaps (before annotation)
+
+Features in ROWS; Samples in COLUMNS
+
+<!-- (Showing only partial output) -->
+<!-- ```{r out.width = '95%'} -->
+<!-- heatmap(data.matrix(dframe[1:40, 1:16]), -->
+<!--         cexRow = 0.7, cexCol = 1, -->
+<!--         Colv = NA) -->
+<!-- ``` -->
+
+#### Heatmaply
+```{r Heatmap.Pre1, out.width = '95%'}
+p <- heatmaply(data.matrix(dframe1), 
+        #dendrogram = "row",
+        xlab = "", ylab = "", 
+        main = "",
+        scale = "none",
+        margins = c(60,100,40,20),
+        #grid_color = "white",
+        #grid_width = 0,
+        titleX = FALSE,
+        hide_colorbar = FALSE,
+        branches_lwd = 0.1,
+        label_names = c("Feature", "Sample", "Value"),
+        fontsize_row = 5, fontsize_col = 5,
+        labCol = colnames(data.matrix(dframe1)),
+        labRow = rownames(data.matrix(dframe1)),
+        heatmap_layers = theme(axis.line=element_blank())
+        )
+p
+# save the widget
+# library(htmlwidgets)
+# saveWidget(p, file= "~/.../heatmap.html")
+```
+
+```{r Heatmap.Pre2, out.width = '95%'}
+p <- heatmaply(data.matrix(dframe2), 
+        #dendrogram = "row",
+        xlab = "", ylab = "", 
+        main = "",
+        scale = "none",
+        margins = c(60,100,40,20),
+        #grid_color = "white",
+        #grid_width = 0,
+        titleX = FALSE,
+        hide_colorbar = FALSE,
+        branches_lwd = 0.1,
+        label_names = c("Feature", "Sample", "Value"),
+        fontsize_row = 5, fontsize_col = 5,
+        labCol = colnames(data.matrix(dframe2)),
+        labRow = rownames(data.matrix(dframe2)),
+        heatmap_layers = theme(axis.line=element_blank())
+        )
+p
+# save the widget
+# library(htmlwidgets)
+# saveWidget(p, file= "~/.../heatmap.html")
+```
+
+### Annotated Matrix
+
+Gene Ontology used: **`r p.GO.onto`**
+
+Min. number of genes required to pass the filter: **`r p.GO.miN`**
+
+Annotated categories: **`r ncol(tar_read(categ_matrix1))`** (for *`r p.inFile1`*)
+
+Annotated categories: **`r ncol(tar_read(categ_matrix2))`** (for *`r p.inFile2`*)
+
+Shared annotated categories: **`r intersect(colnames(categ_matrix1), colnames(categ_matrix2))`**
+
+
+(Showing only partial output)
+```{r out.width = '95%'}
+tar_read(categ_sums1)
+tar_read(categ_sums2)
+head(tar_read(categ_intersect1))
+head(tar_read(categ_intersect2))
+tar_read(categ_intersect)
+```
+
+Features in ROWS: **`r nrow(tar_read(annot_matrix1))`** (for *`r p.inFile1`*)
+
+Features in ROWS: **`r nrow(tar_read(annot_matrix2))`** (for *`r p.inFile2`*)
+
+Samples+Categs in COLUMNS: **`r ncol(tar_read(annot_matrix1))`** (for *`r p.inFile1`*)
+
+Samples+Categs in COLUMNS: **`r ncol(tar_read(annot_matrix2))`** (for *`r p.inFile2`*)
+
+
+(Showing only partial output)
+```{r out.width = '95%'}
+head(tar_read(annot_matrix1))
+head(tar_read(annot_matrix2))
+```
+
+```{r Heatmap.Categs1, out.width = '95%', eval = FALSE}
+p <- heatmaply(categ_matrix1, 
+        dendrogram = "none",
+        xlab = "", ylab = "", 
+        main = "",
+        scale = "none",
+        margins = c(60,100,40,20),
+        #grid_color = "white",
+        #grid_width = 0,
+        titleX = FALSE,
+        hide_colorbar = FALSE,
+        branches_lwd = 0.1,
+        label_names = c("Feature", "Sample", "Value"),
+        fontsize_row = 5, fontsize_col = 5,
+        labCol = colnames(categ_matrix1),
+        labRow = rownames(categ_matrix1),
+        heatmap_layers = theme(axis.line=element_blank())
+        )
+p
+# save the widget
+# library(htmlwidgets)
+# saveWidget(p, file= "~/.../heatmap.html")
+```
+
+```{r Heatmap.Categs2, out.width = '95%', eval = FALSE}
+p <- heatmaply(categ_matrix2, 
+        dendrogram = "none",
+        xlab = "", ylab = "", 
+        main = "",
+        scale = "none",
+        margins = c(60,100,40,20),
+        #grid_color = "white",
+        #grid_width = 0,
+        titleX = FALSE,
+        hide_colorbar = FALSE,
+        branches_lwd = 0.1,
+        label_names = c("Feature", "Sample", "Value"),
+        fontsize_row = 5, fontsize_col = 5,
+        labCol = colnames(categ_matrix2),
+        labRow = rownames(categ_matrix2),
+        heatmap_layers = theme(axis.line=element_blank())
+        )
+p
+# save the widget
+# library(htmlwidgets)
+# saveWidget(p, file= "~/.../heatmap.html")
+```
+
+
+### Expanded Matrices
+
+Gene Ontology used: **`r p.GO.onto`**
+
+Min. number of genes applied to filter: **`r p.GO.miN`**
+
+Annotated categories: **`r ncol(tar_read(categ_matrix1))`** (for *`r p.inFile1`*)
+
+Annotated categories: **`r ncol(tar_read(categ_matrix2))`** (for *`r p.inFile2`*)
+
+Features+Categs in ROWS: **`r nrow(tar_read(expd_matrix1))`** (for *`r p.inFile1`*)
+
+Features+Categs in ROWS: **`r nrow(tar_read(expd_matrix2))`** (for *`r p.inFile2`*)
+
+Samples in COLUMNS: **`r ncol(tar_read(expd_matrix1))`** (for *`r p.inFile1`*)
+
+Samples in COLUMNS: **`r ncol(tar_read(expd_matrix2))`** (for *`r p.inFile2`*)
+
+
+
+(Showing only partial output)
+```{r out.width = '95%'}
+tail(tar_read(expd_matrix1), ncol(categ_matrix1))[,1:6]
+tail(tar_read(exc_exp_mat1), ncol(categ_matrix1))[,1:6]
+dim(tar_read(exc_exp_mat1))
+tail(tar_read(expd_matrix2), ncol(categ_matrix2))[,1:6]
+tail(tar_read(exc_exp_mat2), ncol(categ_matrix2))[,1:6]
+dim(tar_read(exc_exp_mat2))
+tail(tar_read(int_exp_mat), 10)[,1:6]
+dim(tar_read(int_exp_mat))
+```
+
+### Heatmap (of intersect matrix, after expansion)
+
+Features+Categs in ROWS; Samples in COLUMNS
+
+```{r Heatmap.Inter, out.width = '95%'}
+p <- heatmaply(int_exp_mat, 
+        #dendrogram = "row",
+        xlab = "", ylab = "", 
+        main = "",
+        scale = "none",
+        margins = c(60,100,40,20),
+        #grid_color = "white",
+        #grid_width = 0,
+        titleX = FALSE,
+        hide_colorbar = FALSE,
+        branches_lwd = 0.1,
+        label_names = c("Feature", "Sample", "Value"),
+        fontsize_row = 5, fontsize_col = 5,
+        labCol = colnames(int_exp_mat),
+        labRow = rownames(int_exp_mat),
+        heatmap_layers = theme(axis.line=element_blank())
+        )
+p
+# save the widget
+# library(htmlwidgets)
+# saveWidget(p, file= "~/.../heatmap.html")
+```
+
+
+### Heatmap (after row expansion) 
+
+Features+Categs in ROWS; Samples in COLUMNS
+
+```{r Heatmap.Post1, out.width = '95%'}
+p <- heatmaply(expd_matrix1, 
+        #dendrogram = "row",
+        xlab = "", ylab = "", 
+        main = "",
+        scale = "none",
+        margins = c(60,100,40,20),
+        #grid_color = "white",
+        #grid_width = 0,
+        titleX = FALSE,
+        hide_colorbar = FALSE,
+        branches_lwd = 0.1,
+        label_names = c("Feature", "Sample", "Value"),
+        fontsize_row = 5, fontsize_col = 5,
+        labCol = colnames(expd_matrix1),
+        labRow = rownames(expd_matrix1),
+        heatmap_layers = theme(axis.line=element_blank())
+        )
+p
+# save the widget
+# library(htmlwidgets)
+# saveWidget(p, file= "~/.../heatmap.html")
+```
+
+```{r Heatmap.Post2, out.width = '95%'}
+p <- heatmaply(expd_matrix2, 
+        #dendrogram = "row",
+        xlab = "", ylab = "", 
+        main = "",
+        scale = "none",
+        margins = c(60,100,40,20),
+        #grid_color = "white",
+        #grid_width = 0,
+        titleX = FALSE,
+        hide_colorbar = FALSE,
+        branches_lwd = 0.1,
+        label_names = c("Feature", "Sample", "Value"),
+        fontsize_row = 5, fontsize_col = 5,
+        labCol = colnames(expd_matrix2),
+        labRow = rownames(expd_matrix2),
+        heatmap_layers = theme(axis.line=element_blank())
+        )
+p
+# save the widget
+# library(htmlwidgets)
+# saveWidget(p, file= "~/.../heatmap.html")
+```
+
+
+### MFA Data prep
+
+NumSamples: **`r ncol(tar_read(dframe1))`**
+
+NumGenes:  **`r nrow(tar_read(dframe1))`**
+
+NumProts:  **`r nrow(tar_read(dframe2))`**
+
+numGOsInGenes: **`r nrow(tar_read(exc_exp_mat1))`**
+
+numGOsInProts: **`r nrow(tar_read(exc_exp_mat2))`**
+
+numGOsInCommon: **`r nrow(tar_read(int_exp_mat))`**
+
+
+```{r out.width = '95%', echo=FALSE}
+show(tar_read(blocksBasic))
+show(tar_read(blocksExp))
+show(tar_read(load_grinfo))
+table(as.matrix(tar_read(load_grinfo)))
+```
