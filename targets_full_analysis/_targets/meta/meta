@@ -72,6 +72,9 @@ jointBasicData|stem|602a8cd511ba738f|72ccd1de939bb939|8aea83f4e6036780|-68533442
 jointExpData|stem|17fab780ea8948c8|d5cb7bf23175eab2|8da3a93c44261d65|-1904629365||t19163.6811321429s|62e694ffac931451|428935|rds|vector|||0||
 blocksBasic|stem|adc945cb50137080|e3c9805f4dab3ade|f96ef59a9b5a995e|-1540299219||t19163.6956781036s|32290136928cfe86|53|rds|vector|||0.69||
 blocksExp|stem|5bab0ae7fb071e84|a360f5ec69ad6708|94b41ef1289a2c5b|2037094674||t19163.6956792114s|69a0781b392635fa|60|rds|vector|||0||
+groupInfo|stem|05d1471852a8e436|d3783be88c77b544|c0e27cdfbbf91da6|-1506356642||t19180.65909729s|18d1d8c65487954c|124|rds|vector|||2.38||
+supplGroups|stem|8a24890c2b2368d8|c57b10811412a27d|a3dad144c40657ed|158415308||t19180.6671997492s|65d748ee46b4c59e|58|rds|vector|||0.69||
+basicNames|stem|367a316fb4d58354|59d6c106c44dbfd2|a3dad144c40657ed|1057722410||t19180.6676961406s|b75a24994a596ec9|65|rds|vector|||0.67||
 get_intersect_expmat|function|cb0490e48547f12b||||||||||||||
 p.resultsDir|object|26a6b9ffae1b7593||||||||||||||
 get_categ_matrix|function|6f171cfedf6696f9||||||||||||||
@@ -84,9 +87,11 @@ p.outTag2|object|318ef2d55f9a471b||||||||||||||
 set_dframe|function|89f9d7c3f23ef510||||||||||||||
 p.annotFile|object|b050cda81a7aabba||||||||||||||
 p.GO.miN|object|9a65e0a43385df34||||||||||||||
-.Random.seed|object|9330688204bbc8d1||||||||||||||
+.Random.seed|object|bd7d26d2ad9609b5||||||||||||||
 expand_annot_matrix|function|a87f5b220a4a19f9||||||||||||||
 get_exclusive_expmat|function|24a9bae4d9eee236||||||||||||||
 get_groupInfo|function|595065a163dc322a||||||||||||||
 p.GO.onto|object|32564f4f0010e9c0||||||||||||||
-report2|stem|f5ad5935a3980231|f0358e002a422c48|71cbec8a0bae7ec7|-1253350427|report_part2.html*report_part2.Rmd|t19163.6979268518s|7593bc1620d20c75|16229346|file|vector|||32.23||
+expandedNames|stem|994e3a9f545449de|fd7fa90066e7ab11|a3dad144c40657ed|1549901066||t19180.6712998982s|187ee8347e2bb00a|84|rds|vector|||0.8||
+expandedTypes|stem|d58c154e267f588b|37ceebaabc0963d7|90e633d2513c5a02|-1257408152||t19180.6713001412s|82c1d84d4f45bcb8|56|rds|vector|||0||
+report2|stem|70769b3e474e8887|f9a6b1729ad10237|2faa0ec862c1c1ae|-1253350427|report_part2.html*report_part2.Rmd|t19180.6716208993s|a824623b64164b24|16229791|file|vector|||29.2||

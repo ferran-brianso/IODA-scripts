@@ -242,10 +242,34 @@ list(
   
   ## 2.02- Carrega la info de groups de mostres (cancer subtype en BRCA data)
   tar_target(
-    load_grinfo,
+    groupInfo,
     get_groupInfo()
   ),
-    
+
+  ## Each group is given a name and it may be given a data type.
+  tar_target(
+    expandedNames,
+    c("genes", "prots", "geneAnots", "protAnots", "commonAnots")  ## FER-HO PER PARAMS!!
+  ),
+
+  
+  tar_target(
+    expandedTypes,
+    c(rep("c", 5))  ## FER-HO PER PARAMS!!
+  ),
+  
+  ## Defining active/suplementary data
+  ## Variables describing biological knowledge are linear combinations of one or more omics variable types 
+  ## so it seems reasonable to start considering these as supplementary.
+  ## Supplementary groups are described by the index of the group in the vector that defines 
+  ## how many variables in each groups.
+
+  tar_target(
+    supplGroups,
+    c(3,4,5) ## FER-HO PER PARAMS!!
+  ),
+  
+  
   ## 2.XX- Creacio de l'informe en HTML part2
   tar_render(report2, "report_part2.Rmd")
 )

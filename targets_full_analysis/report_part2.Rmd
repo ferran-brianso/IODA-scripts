@@ -334,6 +334,14 @@ numGOsInCommon: **`r nrow(tar_read(int_exp_mat))`**
 ```{r out.width = '95%', echo=FALSE}
 show(tar_read(blocksBasic))
 show(tar_read(blocksExp))
-show(tar_read(load_grinfo))
-table(as.matrix(tar_read(load_grinfo)))
+show(tar_read(groupInfo))
+table(as.matrix(tar_read(groupInfo)))
 ```
+
+supplementary groups: **`r tar_read(supplGroups)`**
+
+```{r out.width = '95%', echo=FALSE}
+show(tar_read(expandedNames))
+show(tar_read(expandedTypes))
+```
+
