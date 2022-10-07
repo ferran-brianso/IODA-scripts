@@ -16,7 +16,7 @@ Targets' report corresponding to the functions that perform the full analysis, c
 2. Perform basic MFA analysis (as in "integrative_Analysis_MFA_v2.Rmd") ...
 
 
-```{r libraries, echo=FALSE}
+```{r libraries, echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(heatmaply)
 library(targets)
@@ -338,10 +338,13 @@ show(tar_read(groupInfo))
 table(as.matrix(tar_read(groupInfo)))
 ```
 
-supplementary groups: **`r tar_read(supplGroups)`**
+supplementary groups: **`r p.supplGroupsMFA`**
+
 
 ```{r out.width = '95%', echo=FALSE}
-show(tar_read(expandedNames))
-show(tar_read(expandedTypes))
+#show(tar_read(expandedNames))
+show(p.BlockNamesMFA)
+#show(tar_read(expandedTypes))
+show(p.BlockTypesMFA)
 ```
 

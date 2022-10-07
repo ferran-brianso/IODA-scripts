@@ -21,8 +21,8 @@
 ## related targets: 
 ##       data_file
 
-p.inFile1="data/mrna.csv"    # csv file with raw data from a first omics source (mandatory)
-p.inFile2="data/prots.csv"    # csv file with raw data from a second omics source (optional, or NA)
+p.inFile1 = "data/mrna.csv"    # csv file with raw data from a first omics source (mandatory)
+p.inFile2 = "data/prots.csv"    # csv file with raw data from a second omics source (optional, or NA)
 
 
 ############################################################
@@ -31,8 +31,8 @@ p.inFile2="data/prots.csv"    # csv file with raw data from a second omics sourc
 ##
 
 p.resultsDir = "results"  ## results folder
-p.outTag1 = ".genes"       ## tag to be added to the outputs created
-p.outTag2 = ".prots"       ## tag to be added to the outputs created
+p.outTag1 = ".genes"       ## tag to be added to the outputs created regarding input1
+p.outTag2 = ".prots"       ## tag to be added to the outputs created regarding input2
 
 
 ############################################################
@@ -40,10 +40,10 @@ p.outTag2 = ".prots"       ## tag to be added to the outputs created
 ## related targets: 
 ##       categ_matrix
 
-p.GO.onto="BP" # onto: should be one of "BP"(default), "MF" or "CC"
-p.GO.miN=8      # N: number to filter out those GO categs not having N+ elements from our gene list
+p.GO.onto = "BP" # onto: should be one of "BP"(default), "MF" or "CC"
+p.GO.miN = 8      # N: number to filter out those GO categs not having N+ elements from our gene list
 
-p.annotFile=NA #"data/annotations.csv" # should be NA if not available!!!
+p.annotFile = NA #"data/annotations.csv" # should be NA if not available!!!
 
 if(!is.na(p.annotFile)){
   p.GO.onto <<- paste("None.",  "Annotations loaded from file:",  p.annotFile)
@@ -61,5 +61,23 @@ if(!is.na(p.annotFile)){
 p.weight1 = 0.5 
 p.weight2 = (1 - p.weight1) # if complementary with weight1
 
+
+############################################################
+
+
+############################################################
+## Params for MFA block definition
+## related targets: 
+##       expandedNames (NOT USED)
+##       expandedTypes (NOT USED)
+##       supplGroups (NOT USED)
+## related function:
+##       c("genes", "prots", "geneAnots", "protAnots", "commonAnots")
+##       c(rep("c", 5))
+##       c(3,4,5)
+
+p.BlockNamesMFA = c("genes", "prots", "geneAnots", "protAnots", "commonAnots")
+p.BlockTypesMFA = c(rep("c", 5))
+p.supplGroupsMFA = c(3,4,5)
 
 ############################################################
