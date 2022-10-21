@@ -278,6 +278,13 @@ list(
     get_basicMfaResults(jointBasicDataSc, blocksBasic, p.BlockNamesMFA[1:2], p.BlockTypesMFA[1:2])
   ),
 
+  ## Applying MFA to expanded data
+  ## MFA is applied on the "expanded" matrix formed by expressions and annotations, that has been previously scaled.
+  tar_target(
+    res.mfa.x,
+    get_expMfaResults(jointExpDataSc, blocksExp, p.BlockNamesMFA, p.BlockTypesMFA, p.supplGroupsMFA)
+  ),
+
   
   ## 2.XX- Creacio de l'informe en HTML part2
   tar_render(report2, "report_part2.Rmd")

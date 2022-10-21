@@ -220,3 +220,13 @@ get_basicMfaResults <- function(basic.data, groups, group.names, group.types) {
   return(mfa.res)
 }
 
+get_expMfaResults <- function(expd.data, groups, group.names, group.types, supplGroups) {
+  require(FactoMineR)
+  mfa.res <- MFA(base=expd.data, #jointBasicDataSc,
+                 group=groups, #blocksBasic,
+                 name.group = group.names, #p.BlockNamesMFA[1:2],
+                 type=group.types, #p.BlockTypesMFA[1:2],
+                 num.group.sup=supplGroups,
+                 graph=FALSE)
+  return(mfa.res)
+}

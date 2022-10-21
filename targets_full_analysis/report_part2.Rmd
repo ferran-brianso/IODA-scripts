@@ -352,13 +352,15 @@ show(p.BlockTypesMFA)
 ```{r out.width = '95%', echo=FALSE}
 # show(tar.read(res.mfa.b))
 show(tar_read(res.mfa.b))
+#dimdesc(tar_read(res.mfa.b))
 ```
 
 
 Representation of Groups
 
 ```{r out.width = '95%', echo=FALSE}
-plot(tar_read(res.mfa.b),choix="group", palette=c("red", "blue"))
+plot(tar_read(res.mfa.b),choix="group", 
+     palette=c("red", "blue"))
 ```
 
 
@@ -385,15 +387,68 @@ plot(tar_read(res.mfa.b), choix="axes",
 Indivuals analysis with factoextra
 
 ```{r out.width = '95%', echo=FALSE}
-pal <- c("green", "coral", "skyblue")
-fviz_mfa_ind(tar_read(res.mfa.b), habillage = tar_read(groupInfo), palette = pal) # color by cancer subtype
+# Habillage parameter sets the phenotypes (= cancer subtypes)
+fviz_mfa_ind(tar_read(res.mfa.b), habillage = tar_read(groupInfo), 
+             palette = c("green", "coral", "skyblue")) # color by cancer subtype
 ```
 
 Individuals analysis with all vars
+
 ```{r out.width = '95%', echo=FALSE}
-pal <- c("green", "blue", "coral", "skyblue", "red")
-fviz_mfa(tar_read(res.mfa.b), habillage = tar_read(groupInfo), palette = pal)# color by groups
+# Habillage parameter sets the phenotypes (= cancer subtypes)
+fviz_mfa(tar_read(res.mfa.b), habillage = tar_read(groupInfo), 
+         palette = c("green", "blue", "coral", "skyblue", "red"))# color by groups
 ```
 
 
+### MFA with Expanded Data
 
+MFA is applied on the "expanded" matrix formed by expressions and annotations, that has been previously scaled.
+
+```{r out.width = '95%', echo=FALSE}
+# show(tar.read(res.mfa.x))
+show(tar_read(res.mfa.x))
+#dimdesc(tar_read(res.mfa.x))
+```
+
+Representation of Groups
+
+```{r out.width = '95%', echo=FALSE}
+plot(tar_read(res.mfa.x), choix="group", 
+     palette=c("darkmagenta", "blue", "red", "cyan", "orange"))
+```
+
+Study of individuals and variables
+
+```{r out.width = '95%', echo=FALSE}
+plot(tar_read(res.mfa.x), choix="var",
+              #invisible="quanti.sup",
+              hab="group",
+              lab.var=TRUE, lim.cos2.var = 0.5, 
+              palette=c("darkmagenta", "blue", "red", "cyan", "orange"))
+
+plot(tar_read(res.mfa.x), choix="ind",
+     partial="all",
+     habillage="group",
+     palette=c("black", "blue", "red"))
+
+plot(tar_read(res.mfa.x), choix="axes", 
+     habillage="group", 
+     palette=c("black", "blue", "red", "cyan", "orange", "darkmagenta"))
+```
+
+Indivuals analysis with factoextra
+
+```{r out.width = '95%', echo=FALSE}
+# Habillage parameter sets the phenotypes (= cancer subtypes)
+fviz_mfa_ind(tar_read(res.mfa.x), habillage = tar_read(groupInfo), 
+             palette = c("green", "coral", "skyblue")) # color by cancer subtype
+```
+
+Individuals analysis with all vars
+
+```{r out.width = '95%', echo=FALSE}
+# Habillage parameter sets the phenotypes (= cancer subtypes)
+fviz_mfa(tar_read(res.mfa.x), habillage = tar_read(groupInfo), 
+         palette = c("green", "blue", "coral", "skyblue", "red"))# color by groups
+```
