@@ -285,6 +285,15 @@ list(
     get_expMfaResults(jointExpDataSc, blocksExp, p.BlockNamesMFA, p.BlockTypesMFA, p.supplGroupsMFA)
   ),
 
+  ## MFA Redefining active/supplem. data
+  ## Now, we consider the group of features created from common annotations between genes and proteins also as principal data to the MFA analysis.
+  ## As said before, supplementary groups are described by the index of the group in the vector that defines how many variables in each groups.
+  ## In this case, we remove group 5 from the supplementary list.
+  tar_target(
+    res.mfa.x2,
+    get_expMfaResults(jointExpDataSc, blocksExp, p.BlockNamesMFA, p.BlockTypesMFA, p.supplGroupsMFA[1:2])
+  ),
+
   
   ## 2.XX- Creacio de l'informe en HTML part2
   tar_render(report2, "report_part2.Rmd")
