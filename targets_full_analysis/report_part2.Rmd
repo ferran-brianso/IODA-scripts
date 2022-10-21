@@ -452,3 +452,62 @@ Individuals analysis with all vars
 fviz_mfa(tar_read(res.mfa.x), habillage = tar_read(groupInfo), 
          palette = c("green", "blue", "coral", "skyblue", "red"))# color by groups
 ```
+
+### MFA redefining active/supplem. data
+
+Now, we consider the group of features created from common annotations between genes and proteins also as principal data to the MFA analysis.
+
+As said before, supplementary groups are described by the index of the group in the vector that defines how many variables in each groups.
+
+In this case, we remove group 5 from the supplementary list.
+
+MFA is applied on the "expanded" matrix formed by expressions and annotations, that has been previously scaled.
+
+```{r out.width = '95%', echo=FALSE}
+# show(tar.read(res.mfa.x))
+show(tar_read(res.mfa.x2))
+#dimdesc(tar_read(res.mfa.x))
+```
+
+Representation of Groups
+
+```{r out.width = '95%', echo=FALSE}
+plot(tar_read(res.mfa.x2), choix="group", 
+     palette=c("orange", "blue", "red", "darkmagenta", "cyan"))
+```
+
+Study of individuals and variables
+
+```{r out.width = '95%', echo=FALSE}
+plot(tar_read(res.mfa.x2), choix="var",
+              #invisible="quanti.sup",
+              hab="group",
+              lab.var=TRUE, lim.cos2.var = 0.5, 
+              palette=c("orange", "blue", "red", "darkmagenta", "cyan"))
+
+plot(tar_read(res.mfa.x2), choix="ind",
+     partial="all",
+     habillage="group",
+     palette=c("black", "blue", "red", "darkmagenta"))
+
+plot(tar_read(res.mfa.x2), choix="axes", 
+     habillage="group", 
+     palette=c("black", "blue", "red", "darkmagenta", "cyan", "orange"))
+```
+
+
+Indivuals analysis with factoextra
+
+```{r out.width = '95%', echo=FALSE}
+# Habillage parameter sets the phenotypes (= cancer subtypes)
+fviz_mfa_ind(tar_read(res.mfa.x2), habillage = tar_read(groupInfo), 
+             palette = c("green", "coral", "skyblue")) # color by cancer subtype
+```
+
+Individuals analysis with all vars
+
+```{r out.width = '95%', echo=FALSE}
+# Habillage parameter sets the phenotypes (= cancer subtypes)
+fviz_mfa(tar_read(res.mfa.x2), habillage = tar_read(groupInfo), 
+         palette = c("green", "darkmagenta", "blue", "coral", "skyblue", "red"))# color by groups
+```

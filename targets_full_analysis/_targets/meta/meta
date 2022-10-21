@@ -80,6 +80,7 @@ p.expNames|object|d8a7acb7b31bfb88||||||||||||||
 expandedNames|stem|994e3a9f545449de|2cf5df03f763a38d|5e93126c43704686|1549901066||t19272.6489871608s|187ee8347e2bb00a|84|rds|vector|||0.7||
 res.mfa.b|stem|b02d7a74c2851673|725be06f49fa2648|779614bfbd8f8a34|-435976589||t19286.5922557191s|dee990ffbae84def|1763657|rds|vector|||0.89||
 res.mfa.x|stem|bf30f466b07e5b4b|ab871f2bcc83b1fd|06a64039568782bd|1172521957||t19286.620910338s|1ce07b2694fab012|2238548|rds|vector|||0.2||
+res.mfa.x2|stem|138dbbf7bedb10d2|b47a1365798ae8a7|98113bb6232bad55|-1717751314||t19286.6452366995s|dc15075280c0db97|2245740|rds|vector|||1.24||
 get_intersect_expmat|function|cb0490e48547f12b||||||||||||||
 p.resultsDir|object|26a6b9ffae1b7593||||||||||||||
 get_categ_matrix|function|6f171cfedf6696f9||||||||||||||
@@ -94,7 +95,7 @@ set_dframe|function|89f9d7c3f23ef510||||||||||||||
 p.annotFile|object|b050cda81a7aabba||||||||||||||
 p.GO.miN|object|9a65e0a43385df34||||||||||||||
 p.supplGroupsMFA|object|3cb88c581da70eed||||||||||||||
-.Random.seed|object|93e790454afc68f0||||||||||||||
+.Random.seed|object|9c380a0fba386302||||||||||||||
 expand_annot_matrix|function|a87f5b220a4a19f9||||||||||||||
 get_basicMfaResults|function|c2c1601336cf53ae||||||||||||||
 get_expMfaResults|function|d85c53c891c2d73a||||||||||||||
@@ -102,4 +103,4 @@ get_exclusive_expmat|function|24a9bae4d9eee236||||||||||||||
 get_groupInfo|function|595065a163dc322a||||||||||||||
 p.GO.onto|object|32564f4f0010e9c0||||||||||||||
 p.BlockTypesMFA|object|2231fef6d7228a56||||||||||||||
-report2|stem|5133aadd4527e542|4e3b4f20fc09ff0f|d56fb119e94c389c|-1253350427|report_part2.html*report_part2.Rmd|t19286.6328736048s|74efd4c205c8d47b|17489199|file|vector|||37.05|ggrepel 135 unlabeled data points too many overlaps. Consider increasing max.overlaps|
+report2|stem|3c59e62c39df1f09|dc5fdd36377ce228|c71cd8752772b602|-1253350427|report_part2.html*report_part2.Rmd|t19286.6526436258s|7952d5e5701b7345|18189442|file|vector|||41.5|ggrepel 133 unlabeled data points too many overlaps. Consider increasing max.overlaps|
