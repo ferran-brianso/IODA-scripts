@@ -28,6 +28,7 @@ library(dplyr)
 options(width = 110)
 ```
 
+
 ### Raw data (before data prep) 
 
 Data loaded from files **`r p.inFile1`** and **`r p.inFile2`**
@@ -38,6 +39,7 @@ Samples in rows; Features in columns
 show(tar_read(in_data1))
 show(tar_read(in_data2))
 ```
+
 
 ### Data frame (before annotation) 
 
@@ -56,6 +58,7 @@ tar_read(dframe1)[1:10,1:10]
 tar_read(dframe2)[1:10,1:10]
 ```
 
+
 ### Heatmaps (before annotation)
 
 Features in ROWS; Samples in COLUMNS
@@ -66,6 +69,7 @@ Features in ROWS; Samples in COLUMNS
 <!--         cexRow = 0.7, cexCol = 1, -->
 <!--         Colv = NA) -->
 <!-- ``` -->
+
 
 #### Heatmaply
 ```{r Heatmap.Pre1, out.width = '95%'}
@@ -115,6 +119,7 @@ p
 # library(htmlwidgets)
 # saveWidget(p, file= "~/.../heatmap.html")
 ```
+
 
 ### Annotated Matrix
 
@@ -234,6 +239,7 @@ tail(tar_read(int_exp_mat), 10)[,1:6]
 dim(tar_read(int_exp_mat))
 ```
 
+
 ### Heatmap (of intersect matrix, after expansion)
 
 Features+Categs in ROWS; Samples in COLUMNS
@@ -347,6 +353,7 @@ show(p.BlockNamesMFA)
 show(p.BlockTypesMFA)
 ```
 
+
 ### MFA with Basic Blocks
 
 ```{r out.width = '95%', echo=FALSE}
@@ -452,6 +459,7 @@ Individuals analysis with all vars
 fviz_mfa(tar_read(res.mfa.x), habillage = tar_read(groupInfo), 
          palette = c("green", "blue", "coral", "skyblue", "red"))# color by groups
 ```
+
 
 ### MFA redefining active/supplem. data
 
