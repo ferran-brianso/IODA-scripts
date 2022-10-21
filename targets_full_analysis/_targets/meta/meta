@@ -78,6 +78,7 @@ basicNames|stem|367a316fb4d58354|59d6c106c44dbfd2|a3dad144c40657ed|1057722410||t
 expandedTypes|stem|d58c154e267f588b|37ceebaabc0963d7|90e633d2513c5a02|-1257408152||t19180.6713001412s|82c1d84d4f45bcb8|56|rds|vector|||0||
 p.expNames|object|d8a7acb7b31bfb88||||||||||||||
 expandedNames|stem|994e3a9f545449de|2cf5df03f763a38d|5e93126c43704686|1549901066||t19272.6489871608s|187ee8347e2bb00a|84|rds|vector|||0.7||
+res.mfa.b|stem|b02d7a74c2851673|725be06f49fa2648|779614bfbd8f8a34|-435976589||t19286.5922557191s|dee990ffbae84def|1763657|rds|vector|||0.89||
 get_intersect_expmat|function|cb0490e48547f12b||||||||||||||
 p.resultsDir|object|26a6b9ffae1b7593||||||||||||||
 get_categ_matrix|function|6f171cfedf6696f9||||||||||||||
@@ -92,10 +93,11 @@ set_dframe|function|89f9d7c3f23ef510||||||||||||||
 p.annotFile|object|b050cda81a7aabba||||||||||||||
 p.GO.miN|object|9a65e0a43385df34||||||||||||||
 p.supplGroupsMFA|object|3cb88c581da70eed||||||||||||||
-.Random.seed|object|4652390802d022a3||||||||||||||
+.Random.seed|object|4e655c81b6112e9c||||||||||||||
 expand_annot_matrix|function|a87f5b220a4a19f9||||||||||||||
+get_basicMfaResults|function|c2c1601336cf53ae||||||||||||||
 get_exclusive_expmat|function|24a9bae4d9eee236||||||||||||||
 get_groupInfo|function|595065a163dc322a||||||||||||||
 p.GO.onto|object|32564f4f0010e9c0||||||||||||||
 p.BlockTypesMFA|object|2231fef6d7228a56||||||||||||||
-report2|stem|5b995500aa1c3213|6b0df9b4d5836fd7|65ef4d7029ae4727|-1253350427|report_part2.html*report_part2.Rmd|t19272.662068904s|c1c20f89a8eace77|16228115|file|vector|||31.81||
+report2|stem|b53e0710f5df4939|e7e63e195c4fe846|75edd1b38e9096f4|-1253350427|report_part2.html*report_part2.Rmd|t19286.612836393s|026021cd3696e5f4|16817692|file|vector|||32.43|ggrepel 135 unlabeled data points too many overlaps. Consider increasing max.overlaps|

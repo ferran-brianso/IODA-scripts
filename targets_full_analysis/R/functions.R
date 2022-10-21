@@ -12,6 +12,8 @@ library(org.Hs.eg.db)
 library(ggplot2)
 library(stats)
 library(mixOmics)
+library(FactoMineR)
+library(factoextra)
 
 
 set_dframe <- function(my.data, resultsDir, outTag) {
@@ -25,7 +27,6 @@ set_dframe <- function(my.data, resultsDir, outTag) {
   save(my.matrix, file = file.path(resultsDir, paste0("input.matrix", outTag, ".Rda")))
   return(t(my.frame))
 }
-
 
 
 get_categ_matrix <- function(onto="BP", resultsDir, N=10, df, afile=NA, outTag = "") {
@@ -103,7 +104,6 @@ expand_annot_matrix <- function(x, resultsDir, s.cols, c.cols, method="mean", ou
   save(expanded.matrix, file = file.path(resultsDir, paste0("expanded.matrix", outTag, ".Rda")))
   return(expanded.matrix)
 }
-
 
 
 get_exclusive_expmat <- function(x, y, resultsDir, s.cols, c.cols1, c.cols2, outTag = "") {
@@ -210,4 +210,13 @@ get_groupInfo <- function() {
   return(brca.subtype)
 }
 
+get_basicMfaResults <- function(basic.data, groups, group.names, group.types) {
+  require(FactoMineR)
+  mfa.res <- MFA(base=basic.data, #jointBasicDataSc,
+                 group=groups, #blocksBasic,
+                 name.group = group.names, #p.BlockNamesMFA[1:2],
+                 type=group.types, #p.BlockTypesMFA[1:2],
+                 graph=FALSE)
+  return(mfa.res)
+}
 

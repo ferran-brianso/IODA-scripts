@@ -85,7 +85,6 @@ list(
     get_categ_matrix(onto=p.GO.onto, resultsDir=p.resultsDir, N=p.GO.miN, df=dframe2, 
                      afile=p.annotFile, outTag = p.outTag2) 
   ),
-
   
   tar_target(
     categ_intersect1,
@@ -270,7 +269,15 @@ list(
 #    supplGroups,
 #    c(3,4,5) ## FET PER PARAMS!!
 #  ),
-  
+
+
+  ## Applying MFA to basic data
+  ## MFA is applied on the "basic" matrix formed only by expressions, that has been previously scaled.
+  tar_target(
+    res.mfa.b,
+    get_basicMfaResults(jointBasicDataSc, blocksBasic, p.BlockNamesMFA[1:2], p.BlockTypesMFA[1:2])
+  ),
+
   
   ## 2.XX- Creacio de l'informe en HTML part2
   tar_render(report2, "report_part2.Rmd")

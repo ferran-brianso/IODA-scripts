@@ -340,11 +340,60 @@ table(as.matrix(tar_read(groupInfo)))
 
 supplementary groups: **`r p.supplGroupsMFA`**
 
-
 ```{r out.width = '95%', echo=FALSE}
 #show(tar_read(expandedNames))
 show(p.BlockNamesMFA)
 #show(tar_read(expandedTypes))
 show(p.BlockTypesMFA)
 ```
+
+### MFA with Basic Blocks
+
+```{r out.width = '95%', echo=FALSE}
+# show(tar.read(res.mfa.b))
+show(tar_read(res.mfa.b))
+```
+
+
+Representation of Groups
+
+```{r out.width = '95%', echo=FALSE}
+plot(tar_read(res.mfa.b),choix="group", palette=c("red", "blue"))
+```
+
+
+Study of individuals and variables
+
+```{r out.width = '95%', echo=FALSE}
+plot(tar_read(res.mfa.b), choix="var",
+              #invisible="quanti.sup",
+              hab="group",
+              lab.var=TRUE, lim.cos2.var = 0.5, 
+              palette=c("black", "blue", "red"))
+
+plot(tar_read(res.mfa.b), choix="ind",
+     partial="all",
+     habillage="group",
+     palette=c("black","blue", "red"))
+
+plot(tar_read(res.mfa.b), choix="axes", 
+     habillage="group", 
+     palette=c("black","blue", "red"))
+```
+
+
+Indivuals analysis with factoextra
+
+```{r out.width = '95%', echo=FALSE}
+pal <- c("green", "coral", "skyblue")
+fviz_mfa_ind(tar_read(res.mfa.b), habillage = tar_read(groupInfo), palette = pal) # color by cancer subtype
+```
+
+Individuals analysis with all vars
+```{r out.width = '95%', echo=FALSE}
+pal <- c("green", "blue", "coral", "skyblue", "red")
+fviz_mfa(tar_read(res.mfa.b), habillage = tar_read(groupInfo), palette = pal)# color by groups
+```
+
+
 
